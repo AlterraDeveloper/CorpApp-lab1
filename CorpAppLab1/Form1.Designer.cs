@@ -29,75 +29,146 @@
         private void InitializeComponent()
         {
             this.tabPane = new System.Windows.Forms.TabControl();
-            this.tabPage1 = new System.Windows.Forms.TabPage();
-            this.tabPage2 = new System.Windows.Forms.TabPage();
-            this.tabPage3 = new System.Windows.Forms.TabPage();
-            this.dataGridForDishes = new System.Windows.Forms.DataGridView();
-            this.Column1 = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.recipesTabPage = new System.Windows.Forms.TabPage();
+            this.ingredientsTabPage = new System.Windows.Forms.TabPage();
+            this.settingsTabPage = new System.Windows.Forms.TabPage();
+            this.btnAddRecipe = new System.Windows.Forms.Button();
+            this.btnEditRecipe = new System.Windows.Forms.Button();
+            this.label1 = new System.Windows.Forms.Label();
+            this.btnAddIngredient = new System.Windows.Forms.Button();
+            this.btnEditIngredient = new System.Windows.Forms.Button();
+            this.ingredientsDataGrid = new System.Windows.Forms.DataGridView();
+            this.label2 = new System.Windows.Forms.Label();
+            this.recipesTreeView = new System.Windows.Forms.TreeView();
             this.tabPane.SuspendLayout();
-            this.tabPage1.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.dataGridForDishes)).BeginInit();
+            this.recipesTabPage.SuspendLayout();
+            this.ingredientsTabPage.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.ingredientsDataGrid)).BeginInit();
             this.SuspendLayout();
             // 
             // tabPane
             // 
-            this.tabPane.Controls.Add(this.tabPage1);
-            this.tabPane.Controls.Add(this.tabPage2);
-            this.tabPane.Controls.Add(this.tabPage3);
+            this.tabPane.Controls.Add(this.recipesTabPage);
+            this.tabPane.Controls.Add(this.ingredientsTabPage);
+            this.tabPane.Controls.Add(this.settingsTabPage);
             this.tabPane.Location = new System.Drawing.Point(13, 13);
             this.tabPane.Name = "tabPane";
             this.tabPane.SelectedIndex = 0;
             this.tabPane.Size = new System.Drawing.Size(760, 518);
             this.tabPane.TabIndex = 0;
             // 
-            // tabPage1
+            // recipesTabPage
             // 
-            this.tabPage1.Controls.Add(this.dataGridForDishes);
-            this.tabPage1.Location = new System.Drawing.Point(4, 22);
-            this.tabPage1.Name = "tabPage1";
-            this.tabPage1.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage1.Size = new System.Drawing.Size(752, 492);
-            this.tabPage1.TabIndex = 0;
-            this.tabPage1.Text = "tabPage1";
-            this.tabPage1.UseVisualStyleBackColor = true;
+            this.recipesTabPage.Controls.Add(this.recipesTreeView);
+            this.recipesTabPage.Controls.Add(this.label1);
+            this.recipesTabPage.Controls.Add(this.btnEditRecipe);
+            this.recipesTabPage.Controls.Add(this.btnAddRecipe);
+            this.recipesTabPage.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.recipesTabPage.Location = new System.Drawing.Point(4, 22);
+            this.recipesTabPage.Name = "recipesTabPage";
+            this.recipesTabPage.Padding = new System.Windows.Forms.Padding(3);
+            this.recipesTabPage.Size = new System.Drawing.Size(752, 492);
+            this.recipesTabPage.TabIndex = 0;
+            this.recipesTabPage.Text = "Рецепты";
+            this.recipesTabPage.UseVisualStyleBackColor = true;
             // 
-            // tabPage2
+            // ingredientsTabPage
             // 
-            this.tabPage2.Location = new System.Drawing.Point(4, 22);
-            this.tabPage2.Name = "tabPage2";
-            this.tabPage2.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage2.Size = new System.Drawing.Size(752, 492);
-            this.tabPage2.TabIndex = 1;
-            this.tabPage2.Text = "tabPage2";
-            this.tabPage2.UseVisualStyleBackColor = true;
+            this.ingredientsTabPage.Controls.Add(this.label2);
+            this.ingredientsTabPage.Controls.Add(this.ingredientsDataGrid);
+            this.ingredientsTabPage.Controls.Add(this.btnEditIngredient);
+            this.ingredientsTabPage.Controls.Add(this.btnAddIngredient);
+            this.ingredientsTabPage.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.ingredientsTabPage.Location = new System.Drawing.Point(4, 22);
+            this.ingredientsTabPage.Name = "ingredientsTabPage";
+            this.ingredientsTabPage.Padding = new System.Windows.Forms.Padding(3);
+            this.ingredientsTabPage.Size = new System.Drawing.Size(752, 492);
+            this.ingredientsTabPage.TabIndex = 1;
+            this.ingredientsTabPage.Text = "Ингредиенты";
+            this.ingredientsTabPage.UseVisualStyleBackColor = true;
             // 
-            // tabPage3
+            // settingsTabPage
             // 
-            this.tabPage3.Location = new System.Drawing.Point(4, 22);
-            this.tabPage3.Name = "tabPage3";
-            this.tabPage3.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage3.Size = new System.Drawing.Size(752, 492);
-            this.tabPage3.TabIndex = 2;
-            this.tabPage3.Text = "tabPage3";
-            this.tabPage3.UseVisualStyleBackColor = true;
+            this.settingsTabPage.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.settingsTabPage.Location = new System.Drawing.Point(4, 22);
+            this.settingsTabPage.Name = "settingsTabPage";
+            this.settingsTabPage.Padding = new System.Windows.Forms.Padding(3);
+            this.settingsTabPage.Size = new System.Drawing.Size(752, 492);
+            this.settingsTabPage.TabIndex = 2;
+            this.settingsTabPage.Text = "Настройки";
+            this.settingsTabPage.UseVisualStyleBackColor = true;
             // 
-            // dataGridForDishes
+            // btnAddRecipe
             // 
-            this.dataGridForDishes.AllowUserToDeleteRows = false;
-            this.dataGridForDishes.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.dataGridForDishes.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
-            this.Column1});
-            this.dataGridForDishes.Location = new System.Drawing.Point(7, 7);
-            this.dataGridForDishes.Name = "dataGridForDishes";
-            this.dataGridForDishes.ReadOnly = true;
-            this.dataGridForDishes.Size = new System.Drawing.Size(739, 479);
-            this.dataGridForDishes.TabIndex = 0;
+            this.btnAddRecipe.Location = new System.Drawing.Point(530, 6);
+            this.btnAddRecipe.Name = "btnAddRecipe";
+            this.btnAddRecipe.Size = new System.Drawing.Size(103, 34);
+            this.btnAddRecipe.TabIndex = 1;
+            this.btnAddRecipe.Text = "Добавить";
+            this.btnAddRecipe.UseVisualStyleBackColor = true;
             // 
-            // Column1
+            // btnEditRecipe
             // 
-            this.Column1.HeaderText = "Column1";
-            this.Column1.Name = "Column1";
-            this.Column1.ReadOnly = true;
+            this.btnEditRecipe.Location = new System.Drawing.Point(639, 6);
+            this.btnEditRecipe.Name = "btnEditRecipe";
+            this.btnEditRecipe.Size = new System.Drawing.Size(107, 34);
+            this.btnEditRecipe.TabIndex = 2;
+            this.btnEditRecipe.Text = "Изменить";
+            this.btnEditRecipe.UseVisualStyleBackColor = true;
+            // 
+            // label1
+            // 
+            this.label1.AutoSize = true;
+            this.label1.Font = new System.Drawing.Font("Microsoft Sans Serif", 16F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label1.Location = new System.Drawing.Point(6, 9);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(236, 26);
+            this.label1.TabIndex = 3;
+            this.label1.Text = "Справочник рецептов";
+            // 
+            // btnAddIngredient
+            // 
+            this.btnAddIngredient.Location = new System.Drawing.Point(527, 6);
+            this.btnAddIngredient.Name = "btnAddIngredient";
+            this.btnAddIngredient.Size = new System.Drawing.Size(112, 38);
+            this.btnAddIngredient.TabIndex = 0;
+            this.btnAddIngredient.Text = "Добавить";
+            this.btnAddIngredient.UseVisualStyleBackColor = true;
+            // 
+            // btnEditIngredient
+            // 
+            this.btnEditIngredient.Location = new System.Drawing.Point(645, 6);
+            this.btnEditIngredient.Name = "btnEditIngredient";
+            this.btnEditIngredient.Size = new System.Drawing.Size(101, 38);
+            this.btnEditIngredient.TabIndex = 1;
+            this.btnEditIngredient.Text = "Изменить";
+            this.btnEditIngredient.UseVisualStyleBackColor = true;
+            // 
+            // ingredientsDataGrid
+            // 
+            this.ingredientsDataGrid.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.ingredientsDataGrid.Location = new System.Drawing.Point(6, 62);
+            this.ingredientsDataGrid.Name = "ingredientsDataGrid";
+            this.ingredientsDataGrid.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
+            this.ingredientsDataGrid.Size = new System.Drawing.Size(740, 424);
+            this.ingredientsDataGrid.TabIndex = 2;
+            // 
+            // label2
+            // 
+            this.label2.AutoSize = true;
+            this.label2.Font = new System.Drawing.Font("Microsoft Sans Serif", 15.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label2.Location = new System.Drawing.Point(6, 11);
+            this.label2.Name = "label2";
+            this.label2.Size = new System.Drawing.Size(275, 25);
+            this.label2.TabIndex = 3;
+            this.label2.Text = "Справочник ингредиентов";
+            // 
+            // recipesTreeView
+            // 
+            this.recipesTreeView.Location = new System.Drawing.Point(11, 50);
+            this.recipesTreeView.Name = "recipesTreeView";
+            this.recipesTreeView.Size = new System.Drawing.Size(735, 436);
+            this.recipesTreeView.TabIndex = 4;
             // 
             // Form1
             // 
@@ -108,8 +179,11 @@
             this.Name = "Form1";
             this.Text = "Form1";
             this.tabPane.ResumeLayout(false);
-            this.tabPage1.ResumeLayout(false);
-            ((System.ComponentModel.ISupportInitialize)(this.dataGridForDishes)).EndInit();
+            this.recipesTabPage.ResumeLayout(false);
+            this.recipesTabPage.PerformLayout();
+            this.ingredientsTabPage.ResumeLayout(false);
+            this.ingredientsTabPage.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.ingredientsDataGrid)).EndInit();
             this.ResumeLayout(false);
 
         }
@@ -117,11 +191,17 @@
         #endregion
 
         private System.Windows.Forms.TabControl tabPane;
-        private System.Windows.Forms.TabPage tabPage1;
-        private System.Windows.Forms.DataGridView dataGridForDishes;
-        private System.Windows.Forms.TabPage tabPage2;
-        private System.Windows.Forms.TabPage tabPage3;
-        private System.Windows.Forms.DataGridViewTextBoxColumn Column1;
+        private System.Windows.Forms.TabPage recipesTabPage;
+        private System.Windows.Forms.TabPage ingredientsTabPage;
+        private System.Windows.Forms.TabPage settingsTabPage;
+        private System.Windows.Forms.Label label1;
+        private System.Windows.Forms.Button btnEditRecipe;
+        private System.Windows.Forms.Button btnAddRecipe;
+        private System.Windows.Forms.Button btnEditIngredient;
+        private System.Windows.Forms.Button btnAddIngredient;
+        private System.Windows.Forms.TreeView recipesTreeView;
+        private System.Windows.Forms.Label label2;
+        private System.Windows.Forms.DataGridView ingredientsDataGrid;
     }
 }
 

@@ -18,27 +18,45 @@ namespace CorpAppLab1
         {
             InitializeComponent();
 
-            var connectionString = GetConnectionString(string.Empty);
+            //var connectionString = GetConnectionString(string.Empty);
 
-            using(SqlConnection sqlConnection = new SqlConnection(connectionString))
+            using (SqlConnection sqlConnection = new SqlConnection(@"Data Source=DESKTOP-KBE43N8\SQLEXPRESS;Initial Catalog=Task1Cookbook_Kiselev;User ID=sa;Password=2411;MultipleActiveResultSets=True"))
             {
-                var cmd = new SqlCommand("select * from dbo.Dishes;", sqlConnection);
+                var cmd = new SqlCommand(
+                    @"SELECT 
+                        ds.DishID,
+                        ds.DishName,
+                        ings.IngredientName,
+                        CONCAT(CAST(ingInD.Quantity as nvarchar(10)), ' ', u.UnitName),
+                        ingInD.Quantity * ings.UnitPrice
+                      FROM dbo.IngredientsInDishes[ingInD]
+
+                        inner join dbo.Dishes[ds] on ingInD.DishID = ds.DishID
+
+                        inner join dbo.Ingredients[ings] on ings.IngredientID = ingInD.IngredientID
+
+                        inner join dbo.Units[u] on u.UnitID = ings.UnitID; ", sqlConnection);
 
                 sqlConnection.Open();
 
                 var reader = cmd.ExecuteReader();
 
-                var dict = new Dictionary<string, string>();
-
                 while (reader.Read())
                 {
-                    dict[reader[0].ToString()] = reader[1].ToString();
+                    TreeNode dishNode = new TreeNode();
+
+                    if (recipesTreeView.Nodes.ContainsKey(reader[0].ToString()))
+                    {
+                        dishNode = recipesTreeView.Nodes.Find(reader[0].ToString(), false).First();
+                    }
+                    else
+                    {
+                        dishNode = recipesTreeView.Nodes.Add(reader[0].ToString(), reader[1].ToString());
+                    }
+                    
+                    dishNode.Nodes.Add(reader[2] + " : " + reader[3]);
                 }
-
-                dataGridForDishes.DataSource = (from row in dict select new { ID = row.Key, DishName = row.Value }).ToList();
             }
-            
-
         }
 
         private string GetConnectionString(string supposedValue)
@@ -60,6 +78,5 @@ namespace CorpAppLab1
 
             return connectionDialog.ConnectionString;
         }
-
     }
 }
