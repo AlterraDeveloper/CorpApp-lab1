@@ -5,58 +5,26 @@ using System.ComponentModel;
 using System.Data;
 using System.Data.SqlClient;
 using System.Drawing;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using Project;
 
 namespace CorpAppLab1
 {
     public partial class Form1 : Form
     {
+        private string _connectionString;
+
         public Form1()
         {
             InitializeComponent();
 
-            //var connectionString = GetConnectionString(string.Empty);
+            
 
-            using (SqlConnection sqlConnection = new SqlConnection(@"Data Source=DESKTOP-KBE43N8\SQLEXPRESS;Initial Catalog=Task1Cookbook_Kiselev;User ID=sa;Password=2411;MultipleActiveResultSets=True"))
-            {
-                var cmd = new SqlCommand(
-                    @"SELECT 
-                        ds.DishID,
-                        ds.DishName,
-                        ings.IngredientName,
-                        CONCAT(CAST(ingInD.Quantity as nvarchar(10)), ' ', u.UnitName),
-                        ingInD.Quantity * ings.UnitPrice
-                      FROM dbo.IngredientsInDishes[ingInD]
-
-                        inner join dbo.Dishes[ds] on ingInD.DishID = ds.DishID
-
-                        inner join dbo.Ingredients[ings] on ings.IngredientID = ingInD.IngredientID
-
-                        inner join dbo.Units[u] on u.UnitID = ings.UnitID; ", sqlConnection);
-
-                sqlConnection.Open();
-
-                var reader = cmd.ExecuteReader();
-
-                while (reader.Read())
-                {
-                    TreeNode dishNode = new TreeNode();
-
-                    if (recipesTreeView.Nodes.ContainsKey(reader[0].ToString()))
-                    {
-                        dishNode = recipesTreeView.Nodes.Find(reader[0].ToString(), false).First();
-                    }
-                    else
-                    {
-                        dishNode = recipesTreeView.Nodes.Add(reader[0].ToString(), reader[1].ToString());
-                    }
-                    
-                    dishNode.Nodes.Add(reader[2] + " : " + reader[3]);
-                }
-            }
+           
         }
 
         private string GetConnectionString(string supposedValue)
@@ -77,6 +45,78 @@ namespace CorpAppLab1
                 return null;
 
             return connectionDialog.ConnectionString;
+        }
+
+        private void txtBoxConnectionString_TextChanged(object sender, EventArgs e)
+        {
+            if (!string.IsNullOrEmpty(this.Text))
+            {
+                btnSaveConnectionStringToFile.Enabled = true;
+                _connectionString = CaesarEncoder.Encrypt(txtBoxConnectionString.Text,true);
+            }
+        }
+
+        private void btnGenerateConnectionString_Click(object sender, EventArgs e)
+        {
+            var connectionString = GetConnectionString(string.Empty);
+            if (connectionString != null)
+            {
+                txtBoxConnectionString.Text = CaesarEncoder.Encrypt(connectionString);
+            }
+            
+        }
+
+        private void btnLoadSettingsFromFile_Click(object sender, EventArgs e)
+        {
+            var explorer = new OpenFileDialog();
+
+            if (explorer.ShowDialog() == DialogResult.OK)
+            {
+                var textFromFile = File.ReadAllText(explorer.FileName);
+
+                txtBoxConnectionString.Text = textFromFile;
+
+                _connectionString = CaesarEncoder.Encrypt(textFromFile,true);
+            }
+
+        }
+
+        private void btnSaveConnectionStringToFile_Click(object sender, EventArgs e)
+        {
+            var explorer = new OpenFileDialog();
+
+            if (explorer.ShowDialog() == DialogResult.OK)
+            {
+                File.WriteAllText(explorer.FileName,txtBoxConnectionString.Text);
+
+                MessageBox.Show($"Файл с настройками {explorer.FileName} успешно сохранен","Успешно", MessageBoxButtons.OK);
+            }
+
+        }
+
+        private void btnShowRecipes_Click(object sender, EventArgs e)
+        {
+            var recipes = new Repository(_connectionString).GetAllRecipes();
+            foreach (var recipe in recipes)
+            {
+                TreeNode dishNode = new TreeNode();
+
+                if (recipesTreeView.Nodes.ContainsKey(recipe.DishID.ToString()))
+                {
+                    dishNode = recipesTreeView.Nodes.Find(recipe.DishID.ToString(), false).First();
+                }
+                else
+                {
+                    dishNode = recipesTreeView.Nodes.Add(recipe.DishID.ToString(), recipe.DishName);
+                }
+
+                foreach (var ingredient in recipe.Ingredients)
+                {
+                    dishNode.Nodes.Add(ingredient);
+                }
+                
+            }
+            
         }
     }
 }
