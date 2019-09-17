@@ -12,6 +12,7 @@ namespace CorpAppLab1
         {
             Ingredients = new List<string>();
         }
+
         public int DishID { get; set; }
         public string DishName { get; set; }
         public List<string> Ingredients { get; set; }

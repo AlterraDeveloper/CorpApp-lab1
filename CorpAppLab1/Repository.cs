@@ -71,8 +71,117 @@ namespace CorpAppLab1
                     }
                 }
             }
-
             return recipesList;
+        }
+
+        public List<Ingredient> GetAllIngredients()
+        {
+            var ingredientsList = new List<Ingredient>();
+
+            using (SqlConnection sqlConnection = new SqlConnection(_connectionString))
+            {
+                var cmd = new SqlCommand(
+                    @"select 
+	                    i.IngredientID,
+	                    i.IngredientName,
+                        i.UnitID,
+	                    u.UnitName,
+	                    i.UnitPrice
+                      from dbo.Ingredients[i]
+                      inner join dbo.Units[u] on u.UnitID = i.UnitID;", sqlConnection);
+
+                sqlConnection.Open();
+
+                var reader = cmd.ExecuteReader();
+
+                while (reader.Read())
+                {
+                    var ingredient = new Ingredient
+                    {
+                        IngredientID = int.Parse(reader[0].ToString()),
+                        IngredientName = reader[1].ToString(),
+                        UnitID = int.Parse(reader[2].ToString()),
+                        auxUnitName = reader[3].ToString(),
+                        UnitPrice = int.Parse(reader[4].ToString())
+                    };
+
+                    ingredientsList.Add(ingredient);
+                }
+            }
+            return ingredientsList;
+        }
+
+        public List<Unit> GetAllUnits()
+        {
+            var unitsList = new List<Unit>();
+
+            using (SqlConnection sqlConnection = new SqlConnection(_connectionString))
+            {
+                var cmd = new SqlCommand(
+                    @"SELECT 
+	                    UnitID,
+                        UnitName
+                      FROM dbo.Units;", sqlConnection);
+
+                sqlConnection.Open();
+
+                var reader = cmd.ExecuteReader();
+
+                while (reader.Read())
+                {
+                    unitsList.Add(new Unit
+                    {
+                        UnitID = int.Parse(reader[0].ToString()),
+                        UnitName = reader[1].ToString()
+                    });
+                }
+            }
+            return unitsList;
+        }
+
+        public void AddIngredient(Ingredient ingredient)
+        {
+            using (SqlConnection sqlConnection = new SqlConnection(_connectionString))
+            {
+                var cmd = new SqlCommand(
+                    $"insert into dbo.Ingredients (IngredientName,UnitID,UnitPrice) Values(N'{ingredient.IngredientName}',{ingredient.UnitID},{ingredient.UnitPrice});", sqlConnection);
+
+                sqlConnection.Open();
+
+                cmd.ExecuteNonQuery();
+            }
+        }
+
+        public bool CheckConnection()
+        {
+            try
+            {
+
+                using (SqlConnection sqlConnection = new SqlConnection(_connectionString))
+                {
+
+                    sqlConnection.Open();
+
+                    return true;
+                }
+            }
+            catch (Exception)
+            {
+                return false;
+            }
+        }
+
+        public void UpdateIngredient(Ingredient ingredient)
+        {
+            using (SqlConnection sqlConnection = new SqlConnection(_connectionString))
+            {
+                var cmd = new SqlCommand(
+                    $"UPDATE dbo.Ingredients SET IngredientName = N'{ingredient.IngredientName}',UnitID = {ingredient.UnitID},UnitPrice = {ingredient.UnitPrice} WHERE IngredientID  = {ingredient.IngredientID};", sqlConnection);
+
+                sqlConnection.Open();
+
+                cmd.ExecuteNonQuery();
+            }
         }
     }
 }
