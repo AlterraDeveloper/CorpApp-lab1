@@ -58,7 +58,14 @@
     <Compile Include="AddOrEditIngredientForm.Designer.cs">
       <DependentUpon>AddOrEditIngredientForm.cs</DependentUpon>
     </Compile>
+    <Compile Include="AddSimpleEntity.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="AddSimpleEntity.Designer.cs">
+      <DependentUpon>AddSimpleEntity.cs</DependentUpon>
+    </Compile>
     <Compile Include="CaesarEncoder.cs" />
+    <Compile Include="Dish.cs" />
     <Compile Include="MainForm.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -74,6 +81,9 @@
     <Compile Include="Unit.cs" />
     <EmbeddedResource Include="AddOrEditIngredientForm.resx">
       <DependentUpon>AddOrEditIngredientForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="AddSimpleEntity.resx">
+      <DependentUpon>AddSimpleEntity.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="MainForm.resx">
       <DependentUpon>MainForm.cs</DependentUpon>

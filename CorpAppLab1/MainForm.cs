@@ -49,7 +49,7 @@ namespace CorpAppLab1
             return connectionDialog.ConnectionString;
         }
 
-        #region actionsOnSettingsPage
+        #region actions on Settings page
 
         private void txtBoxConnectionString_TextChanged(object sender, EventArgs e)
         {
@@ -122,7 +122,7 @@ namespace CorpAppLab1
         }
         #endregion
 
-        #region actionsOnRecipesPage
+        #region actions on Recipes page
 
         private void btnShowRecipes_Click(object sender, EventArgs e)
         {
@@ -150,6 +150,8 @@ namespace CorpAppLab1
             }
         }
         #endregion
+
+        #region actions on Ingredients page
 
         private void btnShowIngredients_Click(object sender, EventArgs e)
         {
@@ -179,5 +181,54 @@ namespace CorpAppLab1
             selectedIngredient.Units = new Repository(_connectionString).GetAllUnits();
             new AddOrEditIngredientForm(selectedIngredient, _connectionString).ShowDialog(this);
         }
+
+
+        #endregion
+
+        #region actions on AuxReference page
+        private void btnShowDishes_Click(object sender, EventArgs e)
+        {
+            var dishes = new Repository(_connectionString).GetAllDishes();
+
+            dataGridViewDishes.DataSource = dishes;
+
+            dataGridViewDishes.Columns[0].Visible = false;
+            dataGridViewDishes.Columns[1].HeaderText = "Наименование";
+        }
+
+        private void btnShowUnits_Click(object sender, EventArgs e)
+        {
+            var units = new Repository(_connectionString).GetAllUnits();
+
+            dataGridViewUnits.DataSource = units;
+
+            dataGridViewUnits.Columns[0].Visible = false;
+            dataGridViewUnits.Columns[1].HeaderText = "Наименование";
+        }
+
+        private void btnAddDish_Click(object sender, EventArgs e)
+        {
+            new AddSimpleEntity(new Dish(), _connectionString).ShowDialog(this);
+        }
+
+        private void btnAddUnit_Click(object sender, EventArgs e)
+        {
+            new AddSimpleEntity(new Unit(), _connectionString).ShowDialog(this);
+        }
+
+        private void dataGridViewDishes_DoubleClick(object sender, EventArgs e)
+        {
+            var selectedDishRow = dataGridViewDishes.SelectedRows[0];
+            var selectedDish = ((Dish)selectedDishRow.DataBoundItem);
+            new AddSimpleEntity(selectedDish, _connectionString).ShowDialog(this);
+        }
+
+        private void dataGridViewUnits_DoubleClick(object sender, EventArgs e)
+        {
+            var selectedUnitRow = dataGridViewUnits.SelectedRows[0];
+            var selectedUnit = ((Unit)selectedUnitRow.DataBoundItem);
+            new AddSimpleEntity(selectedUnit, _connectionString).ShowDialog(this);
+        } 
+        #endregion
     }
 }

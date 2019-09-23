@@ -17,6 +17,25 @@ namespace CorpAppLab1
             _connectionString = connStr;
         }
 
+        public bool CheckConnection()
+        {
+            try
+            {
+
+                using (SqlConnection sqlConnection = new SqlConnection(_connectionString))
+                {
+
+                    sqlConnection.Open();
+
+                    return true;
+                }
+            }
+            catch (Exception)
+            {
+                return false;
+            }
+        }
+
         public List<Recipe> GetAllRecipes()
         {
             var recipesList = new List<Recipe>();
@@ -74,6 +93,7 @@ namespace CorpAppLab1
             return recipesList;
         }
 
+        #region actions with ingredients
         public List<Ingredient> GetAllIngredients()
         {
             var ingredientsList = new List<Ingredient>();
@@ -111,6 +131,94 @@ namespace CorpAppLab1
             return ingredientsList;
         }
 
+
+
+        public void AddIngredient(Ingredient ingredient)
+        {
+            using (SqlConnection sqlConnection = new SqlConnection(_connectionString))
+            {
+                var cmd = new SqlCommand(
+                    $"insert into dbo.Ingredients (IngredientName,UnitID,UnitPrice) Values(N'{ingredient.IngredientName}',{ingredient.UnitID},{ingredient.UnitPrice});", sqlConnection);
+
+                sqlConnection.Open();
+
+                cmd.ExecuteNonQuery();
+            }
+        }
+
+
+
+        public void UpdateIngredient(Ingredient ingredient)
+        {
+            using (SqlConnection sqlConnection = new SqlConnection(_connectionString))
+            {
+                var cmd = new SqlCommand(
+                    $"UPDATE dbo.Ingredients SET IngredientName = N'{ingredient.IngredientName}',UnitID = {ingredient.UnitID},UnitPrice = {ingredient.UnitPrice} WHERE IngredientID  = {ingredient.IngredientID};", sqlConnection);
+
+                sqlConnection.Open();
+
+                cmd.ExecuteNonQuery();
+            }
+        } 
+        #endregion
+
+        #region actions with dishes
+        public List<Dish> GetAllDishes()
+        {
+            var dishesList = new List<Dish>();
+
+            using (SqlConnection sqlConnection = new SqlConnection(_connectionString))
+            {
+                var cmd = new SqlCommand(
+                    @"SELECT 
+	                    DishID,
+                        DishName
+                      FROM dbo.Dishes;", sqlConnection);
+
+                sqlConnection.Open();
+
+                var reader = cmd.ExecuteReader();
+
+                while (reader.Read())
+                {
+                    dishesList.Add(new Dish
+                    {
+                        DishID = int.Parse(reader[0].ToString()),
+                        DishName = reader[1].ToString()
+                    });
+                }
+            }
+            return dishesList;
+        }
+
+        public void AddDish(Dish dish)
+        {
+            using (SqlConnection sqlConnection = new SqlConnection(_connectionString))
+            {
+                var cmd = new SqlCommand(
+                    $"insert into dbo.Dishes (DishName) Values(N'{dish.DishName}');", sqlConnection);
+
+                sqlConnection.Open();
+
+                cmd.ExecuteNonQuery();
+            }
+        }
+
+        public void UpdateDish(Dish dish)
+        {
+            using (SqlConnection sqlConnection = new SqlConnection(_connectionString))
+            {
+                var cmd = new SqlCommand(
+                    $"UPDATE dbo.Dishes SET DishName = N'{dish.DishName}' WHERE DishID  = {dish.DishID};", sqlConnection);
+
+                sqlConnection.Open();
+
+                cmd.ExecuteNonQuery();
+            }
+        }
+        #endregion
+
+        #region actions with units
         public List<Unit> GetAllUnits()
         {
             var unitsList = new List<Unit>();
@@ -139,12 +247,12 @@ namespace CorpAppLab1
             return unitsList;
         }
 
-        public void AddIngredient(Ingredient ingredient)
+        public void AddUnit(Unit unit)
         {
             using (SqlConnection sqlConnection = new SqlConnection(_connectionString))
             {
                 var cmd = new SqlCommand(
-                    $"insert into dbo.Ingredients (IngredientName,UnitID,UnitPrice) Values(N'{ingredient.IngredientName}',{ingredient.UnitID},{ingredient.UnitPrice});", sqlConnection);
+                    $"insert into dbo.Units (UnitName) Values(N'{unit.UnitName}');", sqlConnection);
 
                 sqlConnection.Open();
 
@@ -152,36 +260,18 @@ namespace CorpAppLab1
             }
         }
 
-        public bool CheckConnection()
-        {
-            try
-            {
-
-                using (SqlConnection sqlConnection = new SqlConnection(_connectionString))
-                {
-
-                    sqlConnection.Open();
-
-                    return true;
-                }
-            }
-            catch (Exception)
-            {
-                return false;
-            }
-        }
-
-        public void UpdateIngredient(Ingredient ingredient)
+        public void UpdateUnit(Unit unit)
         {
             using (SqlConnection sqlConnection = new SqlConnection(_connectionString))
             {
                 var cmd = new SqlCommand(
-                    $"UPDATE dbo.Ingredients SET IngredientName = N'{ingredient.IngredientName}',UnitID = {ingredient.UnitID},UnitPrice = {ingredient.UnitPrice} WHERE IngredientID  = {ingredient.IngredientID};", sqlConnection);
+                    $"UPDATE dbo.Units SET UnitName = N'{unit.UnitName}' WHERE UnitID  = {unit.UnitID};", sqlConnection);
 
                 sqlConnection.Open();
 
                 cmd.ExecuteNonQuery();
             }
-        }
+        } 
+        #endregion
     }
 }
