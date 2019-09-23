@@ -77,7 +77,7 @@ namespace CorpAppLab1
 
                     recipe.DishID = int.Parse(reader[0].ToString());
                     recipe.DishName = reader[1].ToString();
-                    recipe.Ingredients.Add(reader[2] + " : " + reader[3]);
+                    recipe.IngredientsAsString.Add(reader[2] + " : " + reader[3]);
                     recipe.DishPrice = int.Parse(reader[4].ToString());
 
                     if (recipesList.Contains(recipe))
@@ -91,6 +91,11 @@ namespace CorpAppLab1
                 }
             }
             return recipesList;
+        }
+
+        public Recipe GetRecipeByDishName(string recipeDishName)
+        {
+            return GetAllRecipes().FirstOrDefault(x => x.DishName == recipeDishName);
         }
 
         #region actions with ingredients

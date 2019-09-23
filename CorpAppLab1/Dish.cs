@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace CorpAppLab1
 {
-    public class Dish
+    public class Dish : ReferenceProvider
     {
         public int DishID { get; set; }
         public string DishName { get; set; }

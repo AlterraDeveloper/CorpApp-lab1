@@ -143,7 +143,7 @@ namespace CorpAppLab1
                     dishNode = recipesTreeView.Nodes.Add(recipe.DishID.ToString(), recipe.DishName);
                 }
 
-                foreach (var ingredient in recipe.Ingredients)
+                foreach (var ingredient in recipe.IngredientsAsString)
                 {
                     dishNode.Nodes.Add(ingredient);
                 }
@@ -228,7 +228,25 @@ namespace CorpAppLab1
             var selectedUnitRow = dataGridViewUnits.SelectedRows[0];
             var selectedUnit = ((Unit)selectedUnitRow.DataBoundItem);
             new AddSimpleEntity(selectedUnit, _connectionString).ShowDialog(this);
-        } 
+        }
         #endregion
+
+        private void btnAddRecipe_Click(object sender, EventArgs e)
+        {
+            
+        }
+
+        private void recipesTreeView_NodeMouseDoubleClick(object sender, TreeNodeMouseClickEventArgs e)
+        {
+            if (e.Node.Parent == null)
+            {
+                var repo = new Repository(_connectionString);
+                var dishName = e.Node.Text;
+                var recipe = repo.GetRecipeByDishName(dishName);
+                recipe.Dishes = repo.GetAllDishes();
+                recipe.Ingredients = repo.GetAllIngredients();
+                new AddOrEditRecipeForm(recipe, _connectionString).ShowDialog(this);
+            }
+        }
     }
 }

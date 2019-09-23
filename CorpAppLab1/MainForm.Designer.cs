@@ -49,13 +49,13 @@
             this.tabPane = new System.Windows.Forms.TabControl();
             this.AuxReference = new System.Windows.Forms.TabPage();
             this.groupBox2 = new System.Windows.Forms.GroupBox();
-            this.groupBox1 = new System.Windows.Forms.GroupBox();
-            this.btnAddDish = new System.Windows.Forms.Button();
-            this.btnShowDishes = new System.Windows.Forms.Button();
+            this.dataGridViewUnits = new System.Windows.Forms.DataGridView();
             this.btnAddUnit = new System.Windows.Forms.Button();
             this.btnShowUnits = new System.Windows.Forms.Button();
+            this.groupBox1 = new System.Windows.Forms.GroupBox();
             this.dataGridViewDishes = new System.Windows.Forms.DataGridView();
-            this.dataGridViewUnits = new System.Windows.Forms.DataGridView();
+            this.btnShowDishes = new System.Windows.Forms.Button();
+            this.btnAddDish = new System.Windows.Forms.Button();
             this.settingsTabPage.SuspendLayout();
             this.ingredientsTabPage.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.ingredientsDataGrid)).BeginInit();
@@ -63,9 +63,9 @@
             this.tabPane.SuspendLayout();
             this.AuxReference.SuspendLayout();
             this.groupBox2.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.dataGridViewUnits)).BeginInit();
             this.groupBox1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridViewDishes)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.dataGridViewUnits)).BeginInit();
             this.SuspendLayout();
             // 
             // settingsTabPage
@@ -247,6 +247,7 @@
             this.recipesTreeView.Name = "recipesTreeView";
             this.recipesTreeView.Size = new System.Drawing.Size(735, 436);
             this.recipesTreeView.TabIndex = 4;
+            this.recipesTreeView.NodeMouseDoubleClick += new System.Windows.Forms.TreeNodeMouseClickEventHandler(this.recipesTreeView_NodeMouseDoubleClick);
             // 
             // label1
             // 
@@ -277,6 +278,7 @@
             this.btnAddRecipe.TabIndex = 1;
             this.btnAddRecipe.Text = "Добавить";
             this.btnAddRecipe.UseVisualStyleBackColor = true;
+            this.btnAddRecipe.Click += new System.EventHandler(this.btnAddRecipe_Click);
             // 
             // tabPane
             // 
@@ -320,39 +322,22 @@
             this.groupBox2.TabStop = false;
             this.groupBox2.Text = "Единицы измерения";
             // 
-            // groupBox1
+            // dataGridViewUnits
             // 
-            this.groupBox1.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left)));
-            this.groupBox1.Controls.Add(this.dataGridViewDishes);
-            this.groupBox1.Controls.Add(this.btnShowDishes);
-            this.groupBox1.Controls.Add(this.btnAddDish);
-            this.groupBox1.Location = new System.Drawing.Point(7, 7);
-            this.groupBox1.Name = "groupBox1";
-            this.groupBox1.Size = new System.Drawing.Size(356, 467);
-            this.groupBox1.TabIndex = 0;
-            this.groupBox1.TabStop = false;
-            this.groupBox1.Text = "Блюда";
-            // 
-            // btnAddDish
-            // 
-            this.btnAddDish.Location = new System.Drawing.Point(7, 20);
-            this.btnAddDish.Name = "btnAddDish";
-            this.btnAddDish.Size = new System.Drawing.Size(75, 23);
-            this.btnAddDish.TabIndex = 0;
-            this.btnAddDish.Text = "Добавить";
-            this.btnAddDish.UseVisualStyleBackColor = true;
-            this.btnAddDish.Click += new System.EventHandler(this.btnAddDish_Click);
-            // 
-            // btnShowDishes
-            // 
-            this.btnShowDishes.Location = new System.Drawing.Point(88, 20);
-            this.btnShowDishes.Name = "btnShowDishes";
-            this.btnShowDishes.Size = new System.Drawing.Size(75, 23);
-            this.btnShowDishes.TabIndex = 2;
-            this.btnShowDishes.Text = "Обновить";
-            this.btnShowDishes.UseVisualStyleBackColor = true;
-            this.btnShowDishes.Click += new System.EventHandler(this.btnShowDishes_Click);
+            this.dataGridViewUnits.AllowUserToAddRows = false;
+            this.dataGridViewUnits.AllowUserToDeleteRows = false;
+            this.dataGridViewUnits.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.dataGridViewUnits.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
+            this.dataGridViewUnits.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.dataGridViewUnits.Location = new System.Drawing.Point(7, 50);
+            this.dataGridViewUnits.Name = "dataGridViewUnits";
+            this.dataGridViewUnits.ReadOnly = true;
+            this.dataGridViewUnits.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
+            this.dataGridViewUnits.Size = new System.Drawing.Size(343, 411);
+            this.dataGridViewUnits.TabIndex = 6;
+            this.dataGridViewUnits.DoubleClick += new System.EventHandler(this.dataGridViewUnits_DoubleClick);
             // 
             // btnAddUnit
             // 
@@ -374,6 +359,20 @@
             this.btnShowUnits.UseVisualStyleBackColor = true;
             this.btnShowUnits.Click += new System.EventHandler(this.btnShowUnits_Click);
             // 
+            // groupBox1
+            // 
+            this.groupBox1.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left)));
+            this.groupBox1.Controls.Add(this.dataGridViewDishes);
+            this.groupBox1.Controls.Add(this.btnShowDishes);
+            this.groupBox1.Controls.Add(this.btnAddDish);
+            this.groupBox1.Location = new System.Drawing.Point(7, 7);
+            this.groupBox1.Name = "groupBox1";
+            this.groupBox1.Size = new System.Drawing.Size(356, 467);
+            this.groupBox1.TabIndex = 0;
+            this.groupBox1.TabStop = false;
+            this.groupBox1.Text = "Блюда";
+            // 
             // dataGridViewDishes
             // 
             this.dataGridViewDishes.AllowUserToAddRows = false;
@@ -390,22 +389,25 @@
             this.dataGridViewDishes.TabIndex = 3;
             this.dataGridViewDishes.DoubleClick += new System.EventHandler(this.dataGridViewDishes_DoubleClick);
             // 
-            // dataGridViewUnits
+            // btnShowDishes
             // 
-            this.dataGridViewUnits.AllowUserToAddRows = false;
-            this.dataGridViewUnits.AllowUserToDeleteRows = false;
-            this.dataGridViewUnits.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.dataGridViewUnits.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
-            this.dataGridViewUnits.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.dataGridViewUnits.Location = new System.Drawing.Point(7, 50);
-            this.dataGridViewUnits.Name = "dataGridViewUnits";
-            this.dataGridViewUnits.ReadOnly = true;
-            this.dataGridViewUnits.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
-            this.dataGridViewUnits.Size = new System.Drawing.Size(343, 411);
-            this.dataGridViewUnits.TabIndex = 6;
-            this.dataGridViewUnits.DoubleClick += new System.EventHandler(this.dataGridViewUnits_DoubleClick);
+            this.btnShowDishes.Location = new System.Drawing.Point(88, 20);
+            this.btnShowDishes.Name = "btnShowDishes";
+            this.btnShowDishes.Size = new System.Drawing.Size(75, 23);
+            this.btnShowDishes.TabIndex = 2;
+            this.btnShowDishes.Text = "Обновить";
+            this.btnShowDishes.UseVisualStyleBackColor = true;
+            this.btnShowDishes.Click += new System.EventHandler(this.btnShowDishes_Click);
+            // 
+            // btnAddDish
+            // 
+            this.btnAddDish.Location = new System.Drawing.Point(7, 20);
+            this.btnAddDish.Name = "btnAddDish";
+            this.btnAddDish.Size = new System.Drawing.Size(75, 23);
+            this.btnAddDish.TabIndex = 0;
+            this.btnAddDish.Text = "Добавить";
+            this.btnAddDish.UseVisualStyleBackColor = true;
+            this.btnAddDish.Click += new System.EventHandler(this.btnAddDish_Click);
             // 
             // MainForm
             // 
@@ -425,9 +427,9 @@
             this.tabPane.ResumeLayout(false);
             this.AuxReference.ResumeLayout(false);
             this.groupBox2.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.dataGridViewUnits)).EndInit();
             this.groupBox1.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.dataGridViewDishes)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.dataGridViewUnits)).EndInit();
             this.ResumeLayout(false);
 
         }

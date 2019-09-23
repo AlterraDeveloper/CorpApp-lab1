@@ -52,11 +52,23 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AddIngredientToRecipeForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="AddIngredientToRecipeForm.Designer.cs">
+      <DependentUpon>AddIngredientToRecipeForm.cs</DependentUpon>
+    </Compile>
     <Compile Include="AddOrEditIngredientForm.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="AddOrEditIngredientForm.Designer.cs">
       <DependentUpon>AddOrEditIngredientForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="AddOrEditRecipeForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="AddOrEditRecipeForm.Designer.cs">
+      <DependentUpon>AddOrEditRecipeForm.cs</DependentUpon>
     </Compile>
     <Compile Include="AddSimpleEntity.cs">
       <SubType>Form</SubType>
@@ -79,8 +91,14 @@
     <Compile Include="ReferenceProvider.cs" />
     <Compile Include="Repository.cs" />
     <Compile Include="Unit.cs" />
+    <EmbeddedResource Include="AddIngredientToRecipeForm.resx">
+      <DependentUpon>AddIngredientToRecipeForm.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="AddOrEditIngredientForm.resx">
       <DependentUpon>AddOrEditIngredientForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="AddOrEditRecipeForm.resx">
+      <DependentUpon>AddOrEditRecipeForm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="AddSimpleEntity.resx">
       <DependentUpon>AddSimpleEntity.cs</DependentUpon>
