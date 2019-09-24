@@ -44,7 +44,6 @@
             this.btnShowRecipes = new System.Windows.Forms.Button();
             this.recipesTreeView = new System.Windows.Forms.TreeView();
             this.label1 = new System.Windows.Forms.Label();
-            this.btnEditRecipe = new System.Windows.Forms.Button();
             this.btnAddRecipe = new System.Windows.Forms.Button();
             this.tabPane = new System.Windows.Forms.TabControl();
             this.AuxReference = new System.Windows.Forms.TabPage();
@@ -217,7 +216,6 @@
             this.recipesTabPage.Controls.Add(this.btnShowRecipes);
             this.recipesTabPage.Controls.Add(this.recipesTreeView);
             this.recipesTabPage.Controls.Add(this.label1);
-            this.recipesTabPage.Controls.Add(this.btnEditRecipe);
             this.recipesTabPage.Controls.Add(this.btnAddRecipe);
             this.recipesTabPage.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.recipesTabPage.Location = new System.Drawing.Point(4, 22);
@@ -258,15 +256,6 @@
             this.label1.Size = new System.Drawing.Size(236, 26);
             this.label1.TabIndex = 3;
             this.label1.Text = "Справочник рецептов";
-            // 
-            // btnEditRecipe
-            // 
-            this.btnEditRecipe.Location = new System.Drawing.Point(639, 6);
-            this.btnEditRecipe.Name = "btnEditRecipe";
-            this.btnEditRecipe.Size = new System.Drawing.Size(107, 34);
-            this.btnEditRecipe.TabIndex = 2;
-            this.btnEditRecipe.Text = "Изменить";
-            this.btnEditRecipe.UseVisualStyleBackColor = true;
             // 
             // btnAddRecipe
             // 
@@ -444,7 +433,6 @@
         private System.Windows.Forms.TabPage recipesTabPage;
         private System.Windows.Forms.TreeView recipesTreeView;
         private System.Windows.Forms.Label label1;
-        private System.Windows.Forms.Button btnEditRecipe;
         private System.Windows.Forms.Button btnAddRecipe;
         private System.Windows.Forms.TabControl tabPane;
         private System.Windows.Forms.Label label3;

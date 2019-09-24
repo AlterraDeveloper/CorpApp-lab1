@@ -149,6 +149,24 @@ namespace CorpAppLab1
                 }
             }
         }
+
+        private void btnAddRecipe_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void recipesTreeView_NodeMouseDoubleClick(object sender, TreeNodeMouseClickEventArgs e)
+        {
+            if (e.Node.Parent == null)
+            {
+                var repo = new Repository(_connectionString);
+                var dishName = e.Node.Text;
+                var recipe = repo.GetRecipeByDishName(dishName);
+                recipe.Dishes = repo.GetAllDishes();
+                recipe.Ingredients = repo.GetAllIngredients();
+                new AddOrEditRecipeForm(recipe, _connectionString).ShowDialog(this);
+            }
+        }
         #endregion
 
         #region actions on Ingredients page
@@ -230,23 +248,6 @@ namespace CorpAppLab1
             new AddSimpleEntity(selectedUnit, _connectionString).ShowDialog(this);
         }
         #endregion
-
-        private void btnAddRecipe_Click(object sender, EventArgs e)
-        {
-            
-        }
-
-        private void recipesTreeView_NodeMouseDoubleClick(object sender, TreeNodeMouseClickEventArgs e)
-        {
-            if (e.Node.Parent == null)
-            {
-                var repo = new Repository(_connectionString);
-                var dishName = e.Node.Text;
-                var recipe = repo.GetRecipeByDishName(dishName);
-                recipe.Dishes = repo.GetAllDishes();
-                recipe.Ingredients = repo.GetAllIngredients();
-                new AddOrEditRecipeForm(recipe, _connectionString).ShowDialog(this);
-            }
-        }
+               
     }
 }

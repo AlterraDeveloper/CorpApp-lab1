@@ -33,6 +33,7 @@
             this.label2 = new System.Windows.Forms.Label();
             this.btnAddIngredient = new System.Windows.Forms.Button();
             this.listBoxIngredients = new System.Windows.Forms.ListBox();
+            this.btnSave = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
             // comboBoxDishes
@@ -82,11 +83,22 @@
             this.listBoxIngredients.Size = new System.Drawing.Size(344, 160);
             this.listBoxIngredients.TabIndex = 5;
             // 
+            // btnSave
+            // 
+            this.btnSave.Location = new System.Drawing.Point(17, 315);
+            this.btnSave.Name = "btnSave";
+            this.btnSave.Size = new System.Drawing.Size(344, 23);
+            this.btnSave.TabIndex = 6;
+            this.btnSave.Text = "Сохранить";
+            this.btnSave.UseVisualStyleBackColor = true;
+            this.btnSave.Click += new System.EventHandler(this.btnSave_Click);
+            // 
             // AddOrEditRecipeForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(486, 313);
+            this.ClientSize = new System.Drawing.Size(390, 361);
+            this.Controls.Add(this.btnSave);
             this.Controls.Add(this.listBoxIngredients);
             this.Controls.Add(this.btnAddIngredient);
             this.Controls.Add(this.label2);
@@ -106,5 +118,6 @@
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.Button btnAddIngredient;
         private System.Windows.Forms.ListBox listBoxIngredients;
+        private System.Windows.Forms.Button btnSave;
     }
 }

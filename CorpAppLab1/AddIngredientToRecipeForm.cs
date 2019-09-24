@@ -34,7 +34,7 @@ namespace CorpAppLab1
 
         private void btnAdd_Click(object sender, EventArgs e)
         {
-            var ingredientString = comboBoxIngredients.Text + " : " + inputQuantity.Text + " " + labelUnitName.Text;
+            var ingredientString = "*" + comboBoxIngredients.Text + " : " + inputQuantity.Text + " " + labelUnitName.Text;
             _recipe.IngredientsAsString.Add(ingredientString);
             Close();
         }

@@ -43,5 +43,13 @@ namespace CorpAppLab1
             listBoxIngredients.DataSource = null;
             listBoxIngredients.DataSource = _recipe.IngredientsAsString;
         }
+
+        private void btnSave_Click(object sender, EventArgs e)
+        {
+            _recipe.IngredientsAsString = (List<string>)listBoxIngredients.DataSource;
+            new Repository(_connectionString).UpdateRecipe(_recipe);
+            Close();
+
+        }
     }
 }

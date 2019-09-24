@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Data.SqlClient;
 using System.Linq;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
@@ -98,6 +99,34 @@ namespace CorpAppLab1
             return GetAllRecipes().FirstOrDefault(x => x.DishName == recipeDishName);
         }
 
+        public void UpdateRecipe(Recipe recipe)
+        {
+            var newIngredients = recipe.IngredientsAsString.Where(x => x.StartsWith("*")).Select(x =>
+            {
+                x = x.TrimStart('*');
+                x = x.Substring(0, x.IndexOf(" : "));
+                return x;
+            }).ToList();
+
+            var quantities = recipe.IngredientsAsString.Where(x => x.StartsWith("*")).Select(x => Regex.Match(x, "[0-9]+").Value).ToList();
+
+            using (SqlConnection sqlConnection = new SqlConnection(_connectionString))
+            {
+                var repo = new Repository(_connectionString);
+                for(int i = 0; i < newIngredients.Count; i++)
+                {
+                    var newIngredientID = repo.GetIngredientIDByName(newIngredients[i]);
+
+                    var cmd = new SqlCommand(
+                    $"insert dbo.IngredientsInDishes(DishID, IngredientID, Quantity)values({recipe.DishID}, {newIngredientID}, {quantities[i]}); ", sqlConnection);
+
+                    sqlConnection.Open();
+
+                    cmd.ExecuteNonQuery();
+                }
+            }
+        }
+
         #region actions with ingredients
         public List<Ingredient> GetAllIngredients()
         {
@@ -136,7 +165,11 @@ namespace CorpAppLab1
             return ingredientsList;
         }
 
-
+        public int GetIngredientIDByName(string ingredientName)
+        {
+            var ingredient = GetAllIngredients().FirstOrDefault(x => x.IngredientName == ingredientName);
+            return ingredient == null ? -1 : ingredient.IngredientID;
+        }
 
         public void AddIngredient(Ingredient ingredient)
         {
