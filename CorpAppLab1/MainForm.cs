@@ -173,6 +173,20 @@ namespace CorpAppLab1
 
         private void btnShowIngredients_Click(object sender, EventArgs e)
         {
+            FillOrRefreshGridOfIngredients();
+        }
+
+        private void btnAddIngredient_Click(object sender, EventArgs e)
+        {
+            var ingredient = new Ingredient();
+            ingredient.Units = new Repository(_connectionString).GetAllUnits();
+
+            var dialogResult = new AddOrEditIngredientForm(ingredient, _connectionString).ShowDialog(this);
+            if (dialogResult == DialogResult.Cancel) FillOrRefreshGridOfIngredients();
+        }
+
+        private void FillOrRefreshGridOfIngredients()
+        {
             var ingredients = new Repository(_connectionString).GetAllIngredients();
 
             ingredientsDataGrid.DataSource = ingredients;
@@ -182,14 +196,6 @@ namespace CorpAppLab1
             ingredientsDataGrid.Columns[2].Visible = false;
             ingredientsDataGrid.Columns[3].HeaderText = "Цена за ед.изм.";
             ingredientsDataGrid.Columns[4].HeaderText = "Единица измерения";
-        }
-
-        private void btnAddIngredient_Click(object sender, EventArgs e)
-        {
-            var ingredient = new Ingredient();
-            ingredient.Units = new Repository(_connectionString).GetAllUnits();
-
-            new AddOrEditIngredientForm(ingredient, _connectionString).ShowDialog(this);
         }
 
         private void ingredientsDataGrid_DoubleClick(object sender, EventArgs e)
@@ -247,7 +253,21 @@ namespace CorpAppLab1
             var selectedUnit = ((Unit)selectedUnitRow.DataBoundItem);
             new AddSimpleEntity(selectedUnit, _connectionString).ShowDialog(this);
         }
+
         #endregion
-               
+
+        private void tabPane_Selected(object sender, TabControlEventArgs e)
+        {
+            var tab = e.TabPage;            
+            if (tab != null)
+            {
+                switch (tab.Name)
+                {
+                    case "ingredientsTabPage":
+                        FillOrRefreshGridOfIngredients();
+                        break;
+                }
+            }
+        }
     }
 }

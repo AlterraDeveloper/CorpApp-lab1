@@ -283,6 +283,7 @@
             this.tabPane.SelectedIndex = 0;
             this.tabPane.Size = new System.Drawing.Size(760, 518);
             this.tabPane.TabIndex = 0;
+            this.tabPane.Selected += new System.Windows.Forms.TabControlEventHandler(this.tabPane_Selected);
             // 
             // AuxReference
             // 
