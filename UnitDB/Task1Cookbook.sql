@@ -28,3 +28,8 @@ CREATE TABLE dbo.IngredientsInDishes(
 	CONSTRAINT FK_to_Ingredients_IngredientID FOREIGN KEY (IngredientID) REFERENCES dbo.Ingredients(IngredientID),
 	CONSTRAINT QuantityMustBePositive CHECK (Quantity >= 0),
 );
+
+ALTER TABLE dbo.Units ADD CONSTRAINT AK_UnitName UNIQUE(UnitName);
+ALTER TABLE dbo.Dishes ADD CONSTRAINT AK_DishName UNIQUE(DishName);
+ALTER TABLE dbo.Ingredients ADD CONSTRAINT AK_IngredientName UNIQUE(IngredientName);
+ALTER TABLE dbo.IngredientsInDishes ADD CONSTRAINT AK_DishIngredientPair UNIQUE(DishID,IngredientID);
