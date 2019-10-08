@@ -70,11 +70,11 @@
     <Compile Include="AddOrEditRecipeForm.Designer.cs">
       <DependentUpon>AddOrEditRecipeForm.cs</DependentUpon>
     </Compile>
-    <Compile Include="AddSimpleEntity.cs">
+    <Compile Include="AddOrEditSimpleEntity.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="AddSimpleEntity.Designer.cs">
-      <DependentUpon>AddSimpleEntity.cs</DependentUpon>
+    <Compile Include="AddOrEditSimpleEntity.Designer.cs">
+      <DependentUpon>AddOrEditSimpleEntity.cs</DependentUpon>
     </Compile>
     <Compile Include="CaesarEncoder.cs" />
     <Compile Include="Dish.cs" />
@@ -100,8 +100,8 @@
     <EmbeddedResource Include="AddOrEditRecipeForm.resx">
       <DependentUpon>AddOrEditRecipeForm.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="AddSimpleEntity.resx">
-      <DependentUpon>AddSimpleEntity.cs</DependentUpon>
+    <EmbeddedResource Include="AddOrEditSimpleEntity.resx">
+      <DependentUpon>AddOrEditSimpleEntity.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="MainForm.resx">
       <DependentUpon>MainForm.cs</DependentUpon>

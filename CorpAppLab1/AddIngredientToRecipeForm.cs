@@ -1,11 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel;
 using System.Data;
-using System.Drawing;
+using System.Data.SqlClient;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace CorpAppLab1
@@ -14,29 +11,50 @@ namespace CorpAppLab1
     {
         private Recipe _recipe;
         private List<Ingredient> _ingredients;
+        private string _connectionString;
 
-        public AddIngredientToRecipeForm(ref Recipe recipe)
+        public AddIngredientToRecipeForm(ref Recipe recipe,string connectionString)
         {
             InitializeComponent();
 
             inputQuantity.Maximum = Decimal.MaxValue;
             _recipe = recipe;
             _ingredients = _recipe.Ingredients;
+            _connectionString = connectionString;
 
-            comboBoxIngredients.DataSource = _ingredients.Select(x => x.IngredientName).ToList();
+            comboBoxIngredients.DataSource = _ingredients.Select(x => x.IngredientName).OrderBy(x => x).ToList();
             
-        }
-
-        private void comboBoxIngredients_TextChanged(object sender, EventArgs e)
-        {
-            labelUnitName.Text = _ingredients.FirstOrDefault(x => x.IngredientName == comboBoxIngredients.Text).auxUnitName;
         }
 
         private void btnAdd_Click(object sender, EventArgs e)
         {
-            var ingredientString = "*" + comboBoxIngredients.Text + " : " + inputQuantity.Text + " " + labelUnitName.Text;
-            _recipe.IngredientsAsString.Add(ingredientString);
-            Close();
+            var repo = new Repository(_connectionString);
+            try
+            {
+                var ingredientId = repo.GetIngredientIDByName(comboBoxIngredients.Text);
+                if (ingredientId > 0)
+                {
+                    repo.UpdateRecipe(_recipe.DishID,ingredientId,(int) inputQuantity.Value);
+                    _recipe.IngredientsAsString.Add(comboBoxIngredients.Text + " " +  inputQuantity.Value + " " + labelUnitName.Text);
+                    Close();
+                }
+                else
+                {
+                    MessageBox.Show($"Ингредиента {comboBoxIngredients.Text} нет в справочнике", "Предупреждение", MessageBoxButtons.OK);
+                }
+            }
+            catch (SqlException sqlException)
+            {
+                if (sqlException.Number == 2627)
+                {
+                    MessageBox.Show("Такой ингредиент уже присутствует в рецепте", "Предупреждение", MessageBoxButtons.OK);
+                }
+            }
+        }
+
+        private void comboBoxIngredients_SelectedValueChanged(object sender, EventArgs e)
+        {
+            labelUnitName.Text = _ingredients.FirstOrDefault(x => x.IngredientName == comboBoxIngredients.Text).auxUnitName;
         }
     }
 }

@@ -28,6 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
+            this.components = new System.ComponentModel.Container();
             this.settingsTabPage = new System.Windows.Forms.TabPage();
             this.lblConnectionStatus = new System.Windows.Forms.Label();
             this.btnSaveConnectionStringToFile = new System.Windows.Forms.Button();
@@ -36,35 +37,43 @@
             this.btnLoadSettingsFromFile = new System.Windows.Forms.Button();
             this.label3 = new System.Windows.Forms.Label();
             this.ingredientsTabPage = new System.Windows.Forms.TabPage();
-            this.btnShowIngredients = new System.Windows.Forms.Button();
             this.label2 = new System.Windows.Forms.Label();
             this.ingredientsDataGrid = new System.Windows.Forms.DataGridView();
-            this.btnAddIngredient = new System.Windows.Forms.Button();
             this.recipesTabPage = new System.Windows.Forms.TabPage();
-            this.btnShowRecipes = new System.Windows.Forms.Button();
             this.recipesTreeView = new System.Windows.Forms.TreeView();
             this.label1 = new System.Windows.Forms.Label();
             this.btnAddRecipe = new System.Windows.Forms.Button();
             this.tabPane = new System.Windows.Forms.TabControl();
-            this.AuxReference = new System.Windows.Forms.TabPage();
+            this.auxReferencesTabPane = new System.Windows.Forms.TabPage();
             this.groupBox2 = new System.Windows.Forms.GroupBox();
             this.dataGridViewUnits = new System.Windows.Forms.DataGridView();
-            this.btnAddUnit = new System.Windows.Forms.Button();
-            this.btnShowUnits = new System.Windows.Forms.Button();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
             this.dataGridViewDishes = new System.Windows.Forms.DataGridView();
-            this.btnShowDishes = new System.Windows.Forms.Button();
-            this.btnAddDish = new System.Windows.Forms.Button();
+            this.contextMenuStripIngredients = new System.Windows.Forms.ContextMenuStrip(this.components);
+            this.addIngredient = new System.Windows.Forms.ToolStripMenuItem();
+            this.editIngredient = new System.Windows.Forms.ToolStripMenuItem();
+            this.deleteIngredient = new System.Windows.Forms.ToolStripMenuItem();
+            this.contextMenuStripDishes = new System.Windows.Forms.ContextMenuStrip(this.components);
+            this.addDish = new System.Windows.Forms.ToolStripMenuItem();
+            this.editDish = new System.Windows.Forms.ToolStripMenuItem();
+            this.deleteDish = new System.Windows.Forms.ToolStripMenuItem();
+            this.contextMenuStripUnits = new System.Windows.Forms.ContextMenuStrip(this.components);
+            this.addUnit = new System.Windows.Forms.ToolStripMenuItem();
+            this.editUnit = new System.Windows.Forms.ToolStripMenuItem();
+            this.deleteUnit = new System.Windows.Forms.ToolStripMenuItem();
             this.settingsTabPage.SuspendLayout();
             this.ingredientsTabPage.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.ingredientsDataGrid)).BeginInit();
             this.recipesTabPage.SuspendLayout();
             this.tabPane.SuspendLayout();
-            this.AuxReference.SuspendLayout();
+            this.auxReferencesTabPane.SuspendLayout();
             this.groupBox2.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridViewUnits)).BeginInit();
             this.groupBox1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridViewDishes)).BeginInit();
+            this.contextMenuStripIngredients.SuspendLayout();
+            this.contextMenuStripDishes.SuspendLayout();
+            this.contextMenuStripUnits.SuspendLayout();
             this.SuspendLayout();
             // 
             // settingsTabPage
@@ -147,10 +156,8 @@
             // 
             // ingredientsTabPage
             // 
-            this.ingredientsTabPage.Controls.Add(this.btnShowIngredients);
             this.ingredientsTabPage.Controls.Add(this.label2);
             this.ingredientsTabPage.Controls.Add(this.ingredientsDataGrid);
-            this.ingredientsTabPage.Controls.Add(this.btnAddIngredient);
             this.ingredientsTabPage.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.ingredientsTabPage.Location = new System.Drawing.Point(4, 22);
             this.ingredientsTabPage.Name = "ingredientsTabPage";
@@ -160,21 +167,11 @@
             this.ingredientsTabPage.Text = "Ингредиенты";
             this.ingredientsTabPage.UseVisualStyleBackColor = true;
             // 
-            // btnShowIngredients
-            // 
-            this.btnShowIngredients.Location = new System.Drawing.Point(334, 6);
-            this.btnShowIngredients.Name = "btnShowIngredients";
-            this.btnShowIngredients.Size = new System.Drawing.Size(99, 38);
-            this.btnShowIngredients.TabIndex = 4;
-            this.btnShowIngredients.Text = "Обновить";
-            this.btnShowIngredients.UseVisualStyleBackColor = true;
-            this.btnShowIngredients.Click += new System.EventHandler(this.btnShowIngredients_Click);
-            // 
             // label2
             // 
             this.label2.AutoSize = true;
             this.label2.Font = new System.Drawing.Font("Microsoft Sans Serif", 15.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label2.Location = new System.Drawing.Point(6, 11);
+            this.label2.Location = new System.Drawing.Point(257, 21);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(275, 25);
             this.label2.TabIndex = 3;
@@ -199,21 +196,10 @@
             this.ingredientsDataGrid.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
             this.ingredientsDataGrid.Size = new System.Drawing.Size(740, 424);
             this.ingredientsDataGrid.TabIndex = 2;
-            this.ingredientsDataGrid.DoubleClick += new System.EventHandler(this.ingredientsDataGrid_DoubleClick);
-            // 
-            // btnAddIngredient
-            // 
-            this.btnAddIngredient.Location = new System.Drawing.Point(439, 6);
-            this.btnAddIngredient.Name = "btnAddIngredient";
-            this.btnAddIngredient.Size = new System.Drawing.Size(112, 38);
-            this.btnAddIngredient.TabIndex = 0;
-            this.btnAddIngredient.Text = "Добавить";
-            this.btnAddIngredient.UseVisualStyleBackColor = true;
-            this.btnAddIngredient.Click += new System.EventHandler(this.btnAddIngredient_Click);
+            this.ingredientsDataGrid.MouseClick += new System.Windows.Forms.MouseEventHandler(this.ingredientsDataGrid_MouseClick);
             // 
             // recipesTabPage
             // 
-            this.recipesTabPage.Controls.Add(this.btnShowRecipes);
             this.recipesTabPage.Controls.Add(this.recipesTreeView);
             this.recipesTabPage.Controls.Add(this.label1);
             this.recipesTabPage.Controls.Add(this.btnAddRecipe);
@@ -225,16 +211,6 @@
             this.recipesTabPage.TabIndex = 0;
             this.recipesTabPage.Text = "Рецепты";
             this.recipesTabPage.UseVisualStyleBackColor = true;
-            // 
-            // btnShowRecipes
-            // 
-            this.btnShowRecipes.Location = new System.Drawing.Point(427, 6);
-            this.btnShowRecipes.Name = "btnShowRecipes";
-            this.btnShowRecipes.Size = new System.Drawing.Size(97, 34);
-            this.btnShowRecipes.TabIndex = 5;
-            this.btnShowRecipes.Text = "Обновить";
-            this.btnShowRecipes.UseVisualStyleBackColor = true;
-            this.btnShowRecipes.Click += new System.EventHandler(this.btnShowRecipes_Click);
             // 
             // recipesTreeView
             // 
@@ -261,7 +237,7 @@
             // 
             this.btnAddRecipe.BackColor = System.Drawing.Color.Transparent;
             this.btnAddRecipe.BackgroundImageLayout = System.Windows.Forms.ImageLayout.None;
-            this.btnAddRecipe.Location = new System.Drawing.Point(530, 6);
+            this.btnAddRecipe.Location = new System.Drawing.Point(643, 10);
             this.btnAddRecipe.Name = "btnAddRecipe";
             this.btnAddRecipe.Size = new System.Drawing.Size(103, 34);
             this.btnAddRecipe.TabIndex = 1;
@@ -277,7 +253,7 @@
             this.tabPane.Controls.Add(this.settingsTabPage);
             this.tabPane.Controls.Add(this.recipesTabPage);
             this.tabPane.Controls.Add(this.ingredientsTabPage);
-            this.tabPane.Controls.Add(this.AuxReference);
+            this.tabPane.Controls.Add(this.auxReferencesTabPane);
             this.tabPane.Location = new System.Drawing.Point(13, 13);
             this.tabPane.Name = "tabPane";
             this.tabPane.SelectedIndex = 0;
@@ -285,17 +261,17 @@
             this.tabPane.TabIndex = 0;
             this.tabPane.Selected += new System.Windows.Forms.TabControlEventHandler(this.tabPane_Selected);
             // 
-            // AuxReference
+            // auxReferencesTabPane
             // 
-            this.AuxReference.Controls.Add(this.groupBox2);
-            this.AuxReference.Controls.Add(this.groupBox1);
-            this.AuxReference.Location = new System.Drawing.Point(4, 22);
-            this.AuxReference.Name = "AuxReference";
-            this.AuxReference.Padding = new System.Windows.Forms.Padding(3);
-            this.AuxReference.Size = new System.Drawing.Size(752, 492);
-            this.AuxReference.TabIndex = 3;
-            this.AuxReference.Text = "Доп.справочники";
-            this.AuxReference.UseVisualStyleBackColor = true;
+            this.auxReferencesTabPane.Controls.Add(this.groupBox2);
+            this.auxReferencesTabPane.Controls.Add(this.groupBox1);
+            this.auxReferencesTabPane.Location = new System.Drawing.Point(4, 22);
+            this.auxReferencesTabPane.Name = "auxReferencesTabPane";
+            this.auxReferencesTabPane.Padding = new System.Windows.Forms.Padding(3);
+            this.auxReferencesTabPane.Size = new System.Drawing.Size(752, 492);
+            this.auxReferencesTabPane.TabIndex = 3;
+            this.auxReferencesTabPane.Text = "Доп.справочники";
+            this.auxReferencesTabPane.UseVisualStyleBackColor = true;
             // 
             // groupBox2
             // 
@@ -303,8 +279,6 @@
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.groupBox2.Controls.Add(this.dataGridViewUnits);
-            this.groupBox2.Controls.Add(this.btnAddUnit);
-            this.groupBox2.Controls.Add(this.btnShowUnits);
             this.groupBox2.Location = new System.Drawing.Point(386, 7);
             this.groupBox2.Name = "groupBox2";
             this.groupBox2.Size = new System.Drawing.Size(356, 467);
@@ -321,41 +295,20 @@
             | System.Windows.Forms.AnchorStyles.Right)));
             this.dataGridViewUnits.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
             this.dataGridViewUnits.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.dataGridViewUnits.Location = new System.Drawing.Point(7, 50);
+            this.dataGridViewUnits.Location = new System.Drawing.Point(7, 19);
+            this.dataGridViewUnits.MultiSelect = false;
             this.dataGridViewUnits.Name = "dataGridViewUnits";
             this.dataGridViewUnits.ReadOnly = true;
             this.dataGridViewUnits.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
-            this.dataGridViewUnits.Size = new System.Drawing.Size(343, 411);
+            this.dataGridViewUnits.Size = new System.Drawing.Size(343, 442);
             this.dataGridViewUnits.TabIndex = 6;
-            this.dataGridViewUnits.DoubleClick += new System.EventHandler(this.dataGridViewUnits_DoubleClick);
-            // 
-            // btnAddUnit
-            // 
-            this.btnAddUnit.Location = new System.Drawing.Point(6, 20);
-            this.btnAddUnit.Name = "btnAddUnit";
-            this.btnAddUnit.Size = new System.Drawing.Size(75, 23);
-            this.btnAddUnit.TabIndex = 5;
-            this.btnAddUnit.Text = "Добавить";
-            this.btnAddUnit.UseVisualStyleBackColor = true;
-            this.btnAddUnit.Click += new System.EventHandler(this.btnAddUnit_Click);
-            // 
-            // btnShowUnits
-            // 
-            this.btnShowUnits.Location = new System.Drawing.Point(87, 21);
-            this.btnShowUnits.Name = "btnShowUnits";
-            this.btnShowUnits.Size = new System.Drawing.Size(75, 23);
-            this.btnShowUnits.TabIndex = 3;
-            this.btnShowUnits.Text = "Обновить";
-            this.btnShowUnits.UseVisualStyleBackColor = true;
-            this.btnShowUnits.Click += new System.EventHandler(this.btnShowUnits_Click);
+            this.dataGridViewUnits.MouseClick += new System.Windows.Forms.MouseEventHandler(this.dataGridViewUnits_MouseClick);
             // 
             // groupBox1
             // 
             this.groupBox1.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left)));
             this.groupBox1.Controls.Add(this.dataGridViewDishes);
-            this.groupBox1.Controls.Add(this.btnShowDishes);
-            this.groupBox1.Controls.Add(this.btnAddDish);
             this.groupBox1.Location = new System.Drawing.Point(7, 7);
             this.groupBox1.Name = "groupBox1";
             this.groupBox1.Size = new System.Drawing.Size(356, 467);
@@ -371,33 +324,104 @@
             | System.Windows.Forms.AnchorStyles.Left)));
             this.dataGridViewDishes.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
             this.dataGridViewDishes.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.dataGridViewDishes.Location = new System.Drawing.Point(7, 50);
+            this.dataGridViewDishes.Location = new System.Drawing.Point(7, 19);
+            this.dataGridViewDishes.MultiSelect = false;
             this.dataGridViewDishes.Name = "dataGridViewDishes";
             this.dataGridViewDishes.ReadOnly = true;
             this.dataGridViewDishes.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
-            this.dataGridViewDishes.Size = new System.Drawing.Size(343, 411);
+            this.dataGridViewDishes.Size = new System.Drawing.Size(343, 442);
             this.dataGridViewDishes.TabIndex = 3;
-            this.dataGridViewDishes.DoubleClick += new System.EventHandler(this.dataGridViewDishes_DoubleClick);
+            this.dataGridViewDishes.MouseClick += new System.Windows.Forms.MouseEventHandler(this.dataGridViewDishes_MouseClick);
             // 
-            // btnShowDishes
+            // contextMenuStripIngredients
             // 
-            this.btnShowDishes.Location = new System.Drawing.Point(88, 20);
-            this.btnShowDishes.Name = "btnShowDishes";
-            this.btnShowDishes.Size = new System.Drawing.Size(75, 23);
-            this.btnShowDishes.TabIndex = 2;
-            this.btnShowDishes.Text = "Обновить";
-            this.btnShowDishes.UseVisualStyleBackColor = true;
-            this.btnShowDishes.Click += new System.EventHandler(this.btnShowDishes_Click);
+            this.contextMenuStripIngredients.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.addIngredient,
+            this.editIngredient,
+            this.deleteIngredient});
+            this.contextMenuStripIngredients.Name = "contextMenuStripIngredients";
+            this.contextMenuStripIngredients.Size = new System.Drawing.Size(155, 70);
             // 
-            // btnAddDish
+            // addIngredient
             // 
-            this.btnAddDish.Location = new System.Drawing.Point(7, 20);
-            this.btnAddDish.Name = "btnAddDish";
-            this.btnAddDish.Size = new System.Drawing.Size(75, 23);
-            this.btnAddDish.TabIndex = 0;
-            this.btnAddDish.Text = "Добавить";
-            this.btnAddDish.UseVisualStyleBackColor = true;
-            this.btnAddDish.Click += new System.EventHandler(this.btnAddDish_Click);
+            this.addIngredient.Name = "addIngredient";
+            this.addIngredient.Size = new System.Drawing.Size(154, 22);
+            this.addIngredient.Text = "Добавить";
+            this.addIngredient.Click += new System.EventHandler(this.addIngredient_Click);
+            // 
+            // editIngredient
+            // 
+            this.editIngredient.Name = "editIngredient";
+            this.editIngredient.Size = new System.Drawing.Size(154, 22);
+            this.editIngredient.Text = "Редактировать";
+            this.editIngredient.Click += new System.EventHandler(this.editIngredient_Click);
+            // 
+            // deleteIngredient
+            // 
+            this.deleteIngredient.Name = "deleteIngredient";
+            this.deleteIngredient.Size = new System.Drawing.Size(154, 22);
+            this.deleteIngredient.Text = "Удалить";
+            this.deleteIngredient.Click += new System.EventHandler(this.deleteIngredient_Click);
+            // 
+            // contextMenuStripDishes
+            // 
+            this.contextMenuStripDishes.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.addDish,
+            this.editDish,
+            this.deleteDish});
+            this.contextMenuStripDishes.Name = "contextMenuStripDishes";
+            this.contextMenuStripDishes.Size = new System.Drawing.Size(155, 70);
+            // 
+            // addDish
+            // 
+            this.addDish.Name = "addDish";
+            this.addDish.Size = new System.Drawing.Size(154, 22);
+            this.addDish.Text = "Добавить";
+            this.addDish.Click += new System.EventHandler(this.addDish_Click);
+            // 
+            // editDish
+            // 
+            this.editDish.Name = "editDish";
+            this.editDish.Size = new System.Drawing.Size(154, 22);
+            this.editDish.Text = "Редактировать";
+            this.editDish.Click += new System.EventHandler(this.editDish_Click);
+            // 
+            // deleteDish
+            // 
+            this.deleteDish.Name = "deleteDish";
+            this.deleteDish.Size = new System.Drawing.Size(154, 22);
+            this.deleteDish.Text = "Удалить";
+            this.deleteDish.Click += new System.EventHandler(this.deleteDish_Click);
+            // 
+            // contextMenuStripUnits
+            // 
+            this.contextMenuStripUnits.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.addUnit,
+            this.editUnit,
+            this.deleteUnit});
+            this.contextMenuStripUnits.Name = "contextMenuStripUnits";
+            this.contextMenuStripUnits.Size = new System.Drawing.Size(155, 70);
+            // 
+            // addUnit
+            // 
+            this.addUnit.Name = "addUnit";
+            this.addUnit.Size = new System.Drawing.Size(180, 22);
+            this.addUnit.Text = "Добавить";
+            this.addUnit.Click += new System.EventHandler(this.addUnit_Click);
+            // 
+            // editUnit
+            // 
+            this.editUnit.Name = "editUnit";
+            this.editUnit.Size = new System.Drawing.Size(180, 22);
+            this.editUnit.Text = "Редактировать";
+            this.editUnit.Click += new System.EventHandler(this.editUnit_Click);
+            // 
+            // deleteUnit
+            // 
+            this.deleteUnit.Name = "deleteUnit";
+            this.deleteUnit.Size = new System.Drawing.Size(180, 22);
+            this.deleteUnit.Text = "Удалить";
+            this.deleteUnit.Click += new System.EventHandler(this.deleteUnit_Click);
             // 
             // MainForm
             // 
@@ -415,11 +439,14 @@
             this.recipesTabPage.ResumeLayout(false);
             this.recipesTabPage.PerformLayout();
             this.tabPane.ResumeLayout(false);
-            this.AuxReference.ResumeLayout(false);
+            this.auxReferencesTabPane.ResumeLayout(false);
             this.groupBox2.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.dataGridViewUnits)).EndInit();
             this.groupBox1.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.dataGridViewDishes)).EndInit();
+            this.contextMenuStripIngredients.ResumeLayout(false);
+            this.contextMenuStripDishes.ResumeLayout(false);
+            this.contextMenuStripUnits.ResumeLayout(false);
             this.ResumeLayout(false);
 
         }
@@ -430,7 +457,6 @@
         private System.Windows.Forms.TabPage ingredientsTabPage;
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.DataGridView ingredientsDataGrid;
-        private System.Windows.Forms.Button btnAddIngredient;
         private System.Windows.Forms.TabPage recipesTabPage;
         private System.Windows.Forms.TreeView recipesTreeView;
         private System.Windows.Forms.Label label1;
@@ -441,18 +467,24 @@
         private System.Windows.Forms.TextBox txtBoxConnectionString;
         private System.Windows.Forms.Button btnGenerateConnectionString;
         private System.Windows.Forms.Button btnLoadSettingsFromFile;
-        private System.Windows.Forms.Button btnShowRecipes;
-        private System.Windows.Forms.Button btnShowIngredients;
         private System.Windows.Forms.Label lblConnectionStatus;
-        private System.Windows.Forms.TabPage AuxReference;
+        private System.Windows.Forms.TabPage auxReferencesTabPane;
         private System.Windows.Forms.GroupBox groupBox2;
         private System.Windows.Forms.GroupBox groupBox1;
         private System.Windows.Forms.DataGridView dataGridViewUnits;
-        private System.Windows.Forms.Button btnAddUnit;
-        private System.Windows.Forms.Button btnShowUnits;
         private System.Windows.Forms.DataGridView dataGridViewDishes;
-        private System.Windows.Forms.Button btnShowDishes;
-        private System.Windows.Forms.Button btnAddDish;
+        private System.Windows.Forms.ContextMenuStrip contextMenuStripIngredients;
+        private System.Windows.Forms.ToolStripMenuItem editIngredient;
+        private System.Windows.Forms.ToolStripMenuItem deleteIngredient;
+        private System.Windows.Forms.ToolStripMenuItem addIngredient;
+        private System.Windows.Forms.ContextMenuStrip contextMenuStripDishes;
+        private System.Windows.Forms.ContextMenuStrip contextMenuStripUnits;
+        private System.Windows.Forms.ToolStripMenuItem addDish;
+        private System.Windows.Forms.ToolStripMenuItem editDish;
+        private System.Windows.Forms.ToolStripMenuItem deleteDish;
+        private System.Windows.Forms.ToolStripMenuItem addUnit;
+        private System.Windows.Forms.ToolStripMenuItem editUnit;
+        private System.Windows.Forms.ToolStripMenuItem deleteUnit;
     }
 }
 

@@ -38,12 +38,11 @@
             // 
             // comboBoxIngredients
             // 
-            this.comboBoxIngredients.FormattingEnabled = true;
             this.comboBoxIngredients.Location = new System.Drawing.Point(102, 15);
             this.comboBoxIngredients.Name = "comboBoxIngredients";
             this.comboBoxIngredients.Size = new System.Drawing.Size(284, 21);
             this.comboBoxIngredients.TabIndex = 0;
-            this.comboBoxIngredients.TextChanged += new System.EventHandler(this.comboBoxIngredients_TextChanged);
+            this.comboBoxIngredients.SelectedValueChanged += new System.EventHandler(this.comboBoxIngredients_SelectedValueChanged);
             // 
             // inputQuantity
             // 

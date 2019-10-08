@@ -20,20 +20,22 @@ namespace CorpAppLab1
 
         public bool CheckConnection()
         {
-            try
+            using (SqlConnection sqlConnection = new SqlConnection(_connectionString))
             {
-
-                using (SqlConnection sqlConnection = new SqlConnection(_connectionString))
+                try
                 {
-
                     sqlConnection.Open();
 
                     return true;
                 }
-            }
-            catch (Exception)
-            {
-                return false;
+                catch (Exception)
+                {
+                    return false;
+                }
+                finally
+                {
+                    sqlConnection.Close();
+                }
             }
         }
 
@@ -90,6 +92,7 @@ namespace CorpAppLab1
                         recipesList.Add(recipe);
                     }
                 }
+                sqlConnection.Close();
             }
             return recipesList;
         }
@@ -99,35 +102,23 @@ namespace CorpAppLab1
             return GetAllRecipes().FirstOrDefault(x => x.DishName == recipeDishName);
         }
 
-        public void UpdateRecipe(Recipe recipe)
+        public void UpdateRecipe(int dishID, int ingredientID,int quantitity)
         {
-            var newIngredients = recipe.IngredientsAsString.Where(x => x.StartsWith("*")).Select(x =>
-            {
-                x = x.TrimStart('*');
-                x = x.Substring(0, x.IndexOf(" : "));
-                return x;
-            }).ToList();
-
-            var quantities = recipe.IngredientsAsString.Where(x => x.StartsWith("*")).Select(x => Regex.Match(x, "[0-9]+").Value).ToList();
-
             using (SqlConnection sqlConnection = new SqlConnection(_connectionString))
             {
-                var repo = new Repository(_connectionString);
-                for(int i = 0; i < newIngredients.Count; i++)
-                {
-                    var newIngredientID = repo.GetIngredientIDByName(newIngredients[i]);
+                var cmd = new SqlCommand(
+                $"insert dbo.IngredientsInDishes(DishID, IngredientID, Quantity)values({dishID}, {ingredientID}, {quantitity}); ", sqlConnection);
 
-                    var cmd = new SqlCommand(
-                    $"insert dbo.IngredientsInDishes(DishID, IngredientID, Quantity)values({recipe.DishID}, {newIngredientID}, {quantities[i]}); ", sqlConnection);
+                sqlConnection.Open();
 
-                    sqlConnection.Open();
+                cmd.ExecuteNonQuery();
 
-                    cmd.ExecuteNonQuery();
-                }
+                sqlConnection.Close();
             }
         }
 
         #region actions with ingredients
+
         public List<Ingredient> GetAllIngredients()
         {
             var ingredientsList = new List<Ingredient>();
@@ -161,6 +152,8 @@ namespace CorpAppLab1
 
                     ingredientsList.Add(ingredient);
                 }
+
+                sqlConnection.Close();
             }
             return ingredientsList;
         }
@@ -181,10 +174,10 @@ namespace CorpAppLab1
                 sqlConnection.Open();
 
                 cmd.ExecuteNonQuery();
+
+                sqlConnection.Close();
             }
         }
-
-
 
         public void UpdateIngredient(Ingredient ingredient)
         {
@@ -196,11 +189,34 @@ namespace CorpAppLab1
                 sqlConnection.Open();
 
                 cmd.ExecuteNonQuery();
+
+                sqlConnection.Close();
             }
-        } 
+        }
+
+        public void DeleteIngredient(int IngredientId)
+        {
+            using (SqlConnection sqlConnection = new SqlConnection(_connectionString))
+            {
+                var queryString = $@"BEGIN TRANSACTION;
+                DELETE FROM dbo.IngredientsInDishes WHERE IngredientID = {IngredientId};
+                DELETE FROM dbo.Ingredients WHERE IngredientID = {IngredientId};
+                COMMIT; ";
+
+                var cmd = new SqlCommand(queryString, sqlConnection);
+
+                sqlConnection.Open();
+
+                cmd.ExecuteNonQuery();
+
+                sqlConnection.Close();
+            }
+        }
+
         #endregion
 
         #region actions with dishes
+
         public List<Dish> GetAllDishes()
         {
             var dishesList = new List<Dish>();
@@ -225,8 +241,16 @@ namespace CorpAppLab1
                         DishName = reader[1].ToString()
                     });
                 }
+
+                sqlConnection.Close();
             }
             return dishesList;
+        }
+
+        public int GetDishIDbyName(string dishName)
+        {
+            var dish = GetAllDishes().FirstOrDefault(x => x.DishName == dishName);
+            return dish == null ? -1 : dish.DishID;
         }
 
         public void AddDish(Dish dish)
@@ -239,6 +263,8 @@ namespace CorpAppLab1
                 sqlConnection.Open();
 
                 cmd.ExecuteNonQuery();
+
+                sqlConnection.Close();
             }
         }
 
@@ -252,6 +278,27 @@ namespace CorpAppLab1
                 sqlConnection.Open();
 
                 cmd.ExecuteNonQuery();
+
+                sqlConnection.Close();
+            }
+        }
+
+        public void DeleteDish(int DishId)
+        {
+            using (SqlConnection sqlConnection = new SqlConnection(_connectionString))
+            {
+                var queryString = $@"BEGIN TRANSACTION;
+                DELETE FROM dbo.IngredientsInDishes WHERE DishID = {DishId};
+                DELETE FROM dbo.Dishes WHERE DishID = {DishId};
+                COMMIT; ";
+
+                var cmd = new SqlCommand(queryString, sqlConnection);
+
+                sqlConnection.Open();
+
+                cmd.ExecuteNonQuery();
+
+                sqlConnection.Close();
             }
         }
         #endregion
@@ -281,6 +328,8 @@ namespace CorpAppLab1
                         UnitName = reader[1].ToString()
                     });
                 }
+
+                sqlConnection.Close();
             }
             return unitsList;
         }
@@ -295,6 +344,8 @@ namespace CorpAppLab1
                 sqlConnection.Open();
 
                 cmd.ExecuteNonQuery();
+
+                sqlConnection.Close();
             }
         }
 
@@ -308,8 +359,31 @@ namespace CorpAppLab1
                 sqlConnection.Open();
 
                 cmd.ExecuteNonQuery();
+
+                sqlConnection.Close();
             }
-        } 
+        }
+
+        public void DeleteUnit(int UnitId)
+        {
+            using (SqlConnection sqlConnection = new SqlConnection(_connectionString))
+            {
+                var queryString = $@"BEGIN TRANSACTION;
+				DELETE FROM dbo.IngredientsInDishes WHERE IngredientID in 
+				(SELECT IngredientID FROM dbo.Ingredients WHERE UnitID = {UnitId})
+                DELETE FROM dbo.Ingredients WHERE UnitID = {UnitId};
+                DELETE FROM dbo.Units WHERE UnitID = {UnitId};
+                COMMIT;";
+
+                var cmd = new SqlCommand(queryString, sqlConnection);
+
+                sqlConnection.Open();
+
+                cmd.ExecuteNonQuery();
+
+                sqlConnection.Close();
+            }
+        }
         #endregion
     }
 }

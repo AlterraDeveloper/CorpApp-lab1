@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
+using System.Data.SqlClient;
 using System.Drawing;
 using System.Linq;
 using System.Text;
@@ -23,7 +24,7 @@ namespace CorpAppLab1
 
             _ingredient = ingredient;
 
-            cmbBoxUnit.DataSource = _ingredient.Units.Select(u => u.UnitName).ToList();
+            cmbBoxUnit.DataSource = _ingredient.Units.Select(u => u.UnitName).OrderBy(u => u).ToList();
 
             if (_ingredient.IngredientID == 0)
             {
@@ -44,16 +45,27 @@ namespace CorpAppLab1
             _ingredient.UnitID = _ingredient.Units.First(u => u.UnitName == cmbBoxUnit.Text).UnitID;
             _ingredient.UnitPrice = (int) numInputUnitPrice.Value;
 
-            if (_ingredient.IngredientID == 0)
+            try
             {
-                new Repository(_connectionString).AddIngredient(_ingredient);
-            }
-            else
-            {
-                new Repository(_connectionString).UpdateIngredient(_ingredient);
-            }
+                if (_ingredient.IngredientID == 0)
+                {
+                    new Repository(_connectionString).AddIngredient(_ingredient);
+                }
+                else
+                {
+                    new Repository(_connectionString).UpdateIngredient(_ingredient);
+                }
 
-            Close();
+                DialogResult = DialogResult.OK;
+                Close();
+            }
+            catch (SqlException sqlException)
+            {
+                if (sqlException.Number == 2627)
+                {
+                    MessageBox.Show("Наименование ингредиента должно быть уникальным", "Предупреждение", MessageBoxButtons.OK);
+                }
+            }
         }
     }
 }

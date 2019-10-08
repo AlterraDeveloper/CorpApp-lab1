@@ -1,6 +1,6 @@
 ﻿namespace CorpAppLab1
 {
-    partial class AddSimpleEntity
+    partial class AddOrEditSimpleEntity
     {
         /// <summary>
         /// Required designer variable.

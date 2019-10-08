@@ -43,6 +43,7 @@
             this.comboBoxDishes.Name = "comboBoxDishes";
             this.comboBoxDishes.Size = new System.Drawing.Size(280, 21);
             this.comboBoxDishes.TabIndex = 0;
+            this.comboBoxDishes.SelectedValueChanged += new System.EventHandler(this.comboBoxDishes_SelectedValueChanged);
             // 
             // label1
             // 

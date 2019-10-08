@@ -1,16 +1,11 @@
 ﻿using Microsoft.Data.ConnectionUI;
+using Project;
 using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
 using System.Data.SqlClient;
 using System.Drawing;
 using System.IO;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
-using Project;
 
 namespace CorpAppLab1
 {
@@ -29,17 +24,19 @@ namespace CorpAppLab1
             }
         }
 
+        #region actions on Settings page
+
         private string GetConnectionString(string supposedValue)
         {
             DataConnectionDialog connectionDialog =
-               new DataConnectionDialog { TopMost = true };
+                new DataConnectionDialog { TopMost = true };
             connectionDialog.DataSources.Add(DataSource.SqlDataSource);
             connectionDialog.SelectedDataSource = DataSource.SqlDataSource;
             connectionDialog.SelectedDataProvider = DataProvider.SqlDataProvider;
 
             SqlConnectionStringBuilder connectionBuilder =
-               new SqlConnectionStringBuilder(supposedValue ?? string.Empty)
-               { MultipleActiveResultSets = true };
+                new SqlConnectionStringBuilder(supposedValue ?? string.Empty)
+                { MultipleActiveResultSets = true };
 
             connectionDialog.ConnectionString = connectionBuilder.ToString();
 
@@ -49,7 +46,6 @@ namespace CorpAppLab1
             return connectionDialog.ConnectionString;
         }
 
-        #region actions on Settings page
 
         private void txtBoxConnectionString_TextChanged(object sender, EventArgs e)
         {
@@ -124,7 +120,7 @@ namespace CorpAppLab1
 
         #region actions on Recipes page
 
-        private void btnShowRecipes_Click(object sender, EventArgs e)
+        private void FillOrRefreshGridOfRecipes()
         {
             recipesTreeView.Nodes.Clear();
 
@@ -152,7 +148,12 @@ namespace CorpAppLab1
 
         private void btnAddRecipe_Click(object sender, EventArgs e)
         {
-
+            var repo = new Repository(_connectionString);
+            var recipe = new Recipe();
+            recipe.Dishes = repo.GetAllDishes();
+            recipe.Ingredients = repo.GetAllIngredients();
+            var dialogResult = new AddOrEditRecipeForm(recipe, _connectionString).ShowDialog(this);
+            if (dialogResult == DialogResult.Cancel) FillOrRefreshGridOfRecipes();
         }
 
         private void recipesTreeView_NodeMouseDoubleClick(object sender, TreeNodeMouseClickEventArgs e)
@@ -164,25 +165,27 @@ namespace CorpAppLab1
                 var recipe = repo.GetRecipeByDishName(dishName);
                 recipe.Dishes = repo.GetAllDishes();
                 recipe.Ingredients = repo.GetAllIngredients();
-                new AddOrEditRecipeForm(recipe, _connectionString).ShowDialog(this);
+                var dialogResult = new AddOrEditRecipeForm(recipe, _connectionString).ShowDialog(this);
+                if (dialogResult == DialogResult.Cancel) FillOrRefreshGridOfRecipes();
             }
         }
         #endregion
 
         #region actions on Ingredients page
 
-        private void btnShowIngredients_Click(object sender, EventArgs e)
+        private void ingredientsDataGrid_MouseClick(object sender, MouseEventArgs e)
         {
-            FillOrRefreshGridOfIngredients();
-        }
+            if (e.Button == MouseButtons.Right)
+            {
+                int currentMouseOverRow = ingredientsDataGrid.HitTest(e.X, e.Y).RowIndex;
+                if (currentMouseOverRow >= 0)
+                {
+                    ingredientsDataGrid.Rows[currentMouseOverRow].Selected = true;
+                }
 
-        private void btnAddIngredient_Click(object sender, EventArgs e)
-        {
-            var ingredient = new Ingredient();
-            ingredient.Units = new Repository(_connectionString).GetAllUnits();
+                contextMenuStripIngredients.Show(ingredientsDataGrid, new Point(e.X, e.Y));
 
-            var dialogResult = new AddOrEditIngredientForm(ingredient, _connectionString).ShowDialog(this);
-            if (dialogResult == DialogResult.Cancel) FillOrRefreshGridOfIngredients();
+            }
         }
 
         private void FillOrRefreshGridOfIngredients()
@@ -198,19 +201,42 @@ namespace CorpAppLab1
             ingredientsDataGrid.Columns[4].HeaderText = "Единица измерения";
         }
 
-        private void ingredientsDataGrid_DoubleClick(object sender, EventArgs e)
+        private void addIngredient_Click(object sender, EventArgs e)
+        {
+            var ingredient = new Ingredient();
+            ingredient.Units = new Repository(_connectionString).GetAllUnits();
+
+            var dialogResult = new AddOrEditIngredientForm(ingredient, _connectionString).ShowDialog(this);
+            if (dialogResult == DialogResult.OK) FillOrRefreshGridOfIngredients();
+        }
+
+        private void editIngredient_Click(object sender, EventArgs e)
         {
             var selectedIngredientRow = ingredientsDataGrid.SelectedRows[0];
             var selectedIngredient = ((Ingredient)selectedIngredientRow.DataBoundItem);
             selectedIngredient.Units = new Repository(_connectionString).GetAllUnits();
-            new AddOrEditIngredientForm(selectedIngredient, _connectionString).ShowDialog(this);
+            var dialogResult = new AddOrEditIngredientForm(selectedIngredient, _connectionString).ShowDialog(this);
+            if (dialogResult == DialogResult.OK) FillOrRefreshGridOfIngredients();
+        }
+
+        private void deleteIngredient_Click(object sender, EventArgs e)
+        {
+            var selectedIngredientRow = ingredientsDataGrid.SelectedRows[0];
+            var selectedIngredient = ((Ingredient)selectedIngredientRow.DataBoundItem);
+            var dialogResult = MessageBox.Show($"Вы действительно хотите удалить ингредиент : {selectedIngredient.IngredientName} ?", "Предупреждение", MessageBoxButtons.YesNo);
+            if (dialogResult == DialogResult.Yes)
+            {
+                new Repository(_connectionString).DeleteIngredient(selectedIngredient.IngredientID);
+                FillOrRefreshGridOfIngredients();
+            }
         }
 
 
         #endregion
 
         #region actions on AuxReference page
-        private void btnShowDishes_Click(object sender, EventArgs e)
+
+        private void FillOrRefreshGridOfDishes()
         {
             var dishes = new Repository(_connectionString).GetAllDishes();
 
@@ -220,7 +246,48 @@ namespace CorpAppLab1
             dataGridViewDishes.Columns[1].HeaderText = "Наименование";
         }
 
-        private void btnShowUnits_Click(object sender, EventArgs e)
+        private void dataGridViewDishes_MouseClick(object sender, MouseEventArgs e)
+        {
+            if (e.Button == MouseButtons.Right)
+            {
+                int currentMouseOverRow = dataGridViewDishes.HitTest(e.X, e.Y).RowIndex;
+                if (currentMouseOverRow >= 0)
+                {
+                    dataGridViewDishes.Rows[currentMouseOverRow].Selected = true;
+                }
+
+                contextMenuStripDishes.Show(dataGridViewDishes, new Point(e.X, e.Y));
+
+            }
+        }
+
+        private void addDish_Click(object sender, EventArgs e)
+        {
+            var dialogResult = new AddOrEditSimpleEntity(new Dish(), _connectionString).ShowDialog(this);
+            if (dialogResult == DialogResult.OK) FillOrRefreshGridOfDishes();
+        }
+
+        private void editDish_Click(object sender, EventArgs e)
+        {
+            var selectedDishRow = dataGridViewDishes.SelectedRows[0];
+            var selectedDish = ((Dish)selectedDishRow.DataBoundItem);
+            var dialogResult = new AddOrEditSimpleEntity(selectedDish, _connectionString).ShowDialog(this);
+            if (dialogResult == DialogResult.OK) FillOrRefreshGridOfDishes();
+        }
+
+        private void deleteDish_Click(object sender, EventArgs e)
+        {
+            var selectedDishRow = dataGridViewDishes.SelectedRows[0];
+            var selectedDish = ((Dish)selectedDishRow.DataBoundItem);
+            var dialogResult = MessageBox.Show($"Вы действительно хотите удалить блюдо : {selectedDish.DishName} ?", "Предупреждение", MessageBoxButtons.YesNo);
+            if (dialogResult == DialogResult.Yes)
+            {
+                new Repository(_connectionString).DeleteDish(selectedDish.DishID);
+                FillOrRefreshGridOfDishes();
+            }
+        }
+
+        private void FillOrRefreshGridOfUnits()
         {
             var units = new Repository(_connectionString).GetAllUnits();
 
@@ -230,41 +297,65 @@ namespace CorpAppLab1
             dataGridViewUnits.Columns[1].HeaderText = "Наименование";
         }
 
-        private void btnAddDish_Click(object sender, EventArgs e)
+        private void dataGridViewUnits_MouseClick(object sender, MouseEventArgs e)
         {
-            new AddSimpleEntity(new Dish(), _connectionString).ShowDialog(this);
+            if (e.Button == MouseButtons.Right)
+            {
+                int currentMouseOverRow = dataGridViewUnits.HitTest(e.X, e.Y).RowIndex;
+                if (currentMouseOverRow >= 0)
+                {
+                    dataGridViewUnits.Rows[currentMouseOverRow].Selected = true;
+                }
+
+                contextMenuStripUnits.Show(dataGridViewUnits, new Point(e.X, e.Y));
+
+            }
         }
 
-        private void btnAddUnit_Click(object sender, EventArgs e)
+        private void addUnit_Click(object sender, EventArgs e)
         {
-            new AddSimpleEntity(new Unit(), _connectionString).ShowDialog(this);
+            var dialogResult = new AddOrEditSimpleEntity(new Unit(), _connectionString).ShowDialog(this);
+            if(dialogResult == DialogResult.OK) FillOrRefreshGridOfUnits();
         }
 
-        private void dataGridViewDishes_DoubleClick(object sender, EventArgs e)
-        {
-            var selectedDishRow = dataGridViewDishes.SelectedRows[0];
-            var selectedDish = ((Dish)selectedDishRow.DataBoundItem);
-            new AddSimpleEntity(selectedDish, _connectionString).ShowDialog(this);
-        }
-
-        private void dataGridViewUnits_DoubleClick(object sender, EventArgs e)
+        private void editUnit_Click(object sender, EventArgs e)
         {
             var selectedUnitRow = dataGridViewUnits.SelectedRows[0];
             var selectedUnit = ((Unit)selectedUnitRow.DataBoundItem);
-            new AddSimpleEntity(selectedUnit, _connectionString).ShowDialog(this);
+            var dialogResult = new AddOrEditSimpleEntity(selectedUnit, _connectionString).ShowDialog(this);
+            if (dialogResult == DialogResult.OK) FillOrRefreshGridOfUnits();
+        }
+
+        private void deleteUnit_Click(object sender, EventArgs e)
+        {
+            var selectedUnitRow = dataGridViewUnits.SelectedRows[0];
+            var selectedUnit = ((Unit)selectedUnitRow.DataBoundItem);
+            var dialogResult = MessageBox.Show($"Вы действительно хотите удалить единицу измерения : {selectedUnit.UnitName} ?", "Предупреждение", MessageBoxButtons.YesNo);
+            if (dialogResult == DialogResult.Yes)
+            {
+                new Repository(_connectionString).DeleteUnit(selectedUnit.UnitID);
+                FillOrRefreshGridOfUnits();
+            }
         }
 
         #endregion
 
         private void tabPane_Selected(object sender, TabControlEventArgs e)
         {
-            var tab = e.TabPage;            
-            if (tab != null)
+            var tab = e.TabPage;
+            if (tab != null && tab.Enabled)
             {
                 switch (tab.Name)
                 {
                     case "ingredientsTabPage":
                         FillOrRefreshGridOfIngredients();
+                        break;
+                    case "recipesTabPage":
+                        FillOrRefreshGridOfRecipes();
+                        break;
+                    case "auxReferencesTabPane":
+                        FillOrRefreshGridOfDishes();
+                        FillOrRefreshGridOfUnits();
                         break;
                 }
             }
