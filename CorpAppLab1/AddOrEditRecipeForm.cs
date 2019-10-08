@@ -25,9 +25,9 @@ namespace CorpAppLab1
             else
             {
                 Text = "Редактировать рецепт";
-                comboBoxDishes.SelectedItem = _recipe.DishName;
+                //comboBoxDishes.SelectedItem = _recipe.DishName;
                 comboBoxDishes.Enabled = false;
-                listBoxIngredients.DataSource = _recipe.IngredientsAsString;
+                //listBoxIngredients.DataSource = _recipe.IngredientsAsString;
             }
 
             var existingRecipes = new Repository(_connectionString).GetAllRecipes().Select(x => x.DishID);
@@ -39,21 +39,21 @@ namespace CorpAppLab1
         {
             new AddIngredientToRecipeForm(ref _recipe,_connectionString).ShowDialog(this);
             listBoxIngredients.DataSource = null;
-            listBoxIngredients.DataSource = _recipe.IngredientsAsString;
+            //listBoxIngredients.DataSource = _recipe.IngredientsAsString;
         }
 
         private void btnSave_Click(object sender, EventArgs e)
         {
-            _recipe.IngredientsAsString = (List<string>)listBoxIngredients.DataSource;
+            //_recipe.IngredientsAsString = (List<string>)listBoxIngredients.DataSource;
 
-            if (_recipe.IngredientsAsString != null && _recipe.IngredientsAsString.Count > 0)
-            {
-                Close();
-            }
-            else
-            {
-                MessageBox.Show("Добавьте ингредиенты", "Предупреждение", MessageBoxButtons.OK);
-            }
+            //if (_recipe.IngredientsAsString != null && _recipe.IngredientsAsString.Count > 0)
+            //{
+            //    Close();
+            //}
+            //else
+            //{
+            //    MessageBox.Show("Добавьте ингредиенты", "Предупреждение", MessageBoxButtons.OK);
+            //}
         }
 
         private void comboBoxDishes_SelectedValueChanged(object sender, EventArgs e)
@@ -66,7 +66,7 @@ namespace CorpAppLab1
                 if (_recipe != null)
                 {
                     listBoxIngredients.DataSource = null;
-                    listBoxIngredients.DataSource = _recipe.IngredientsAsString;
+                    //listBoxIngredients.DataSource = _recipe.IngredientsAsString;
                 }
                 else
                 {

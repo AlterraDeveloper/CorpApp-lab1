@@ -48,18 +48,10 @@ namespace CorpAppLab1
             {
                 var cmd = new SqlCommand(
                     @"SELECT 
-                        ds.DishID,
-                        ds.DishName,
-                        ings.IngredientName,
-                        CONCAT(CAST(ingInD.Quantity as nvarchar(10)), ' ', u.UnitName),
-                        ingInD.Quantity * ings.UnitPrice
-                      FROM dbo.IngredientsInDishes[ingInD]
-
-                        inner join dbo.Dishes[ds] on ingInD.DishID = ds.DishID
-
-                        inner join dbo.Ingredients[ings] on ings.IngredientID = ingInD.IngredientID
-
-                        inner join dbo.Units[u] on u.UnitID = ings.UnitID; ", sqlConnection);
+                        DishID,
+						IngredientID,
+						Quantity
+                        FROM dbo.IngredientsInDishes[ingInD]; ", sqlConnection);
 
                 sqlConnection.Open();
 
@@ -78,10 +70,8 @@ namespace CorpAppLab1
                         recipe = recipe == null ? new Recipe() : recipe;
                     }
 
-                    recipe.DishID = int.Parse(reader[0].ToString());
-                    recipe.DishName = reader[1].ToString();
-                    recipe.IngredientsAsString.Add(reader[2] + " : " + reader[3]);
-                    recipe.DishPrice = int.Parse(reader[4].ToString());
+                    recipe.DishID = reader.GetInt32(0);
+                    recipe.IngredientIdsAndQuantities.Add(reader.GetInt32(1), reader.GetInt32(2));
 
                     if (recipesList.Contains(recipe))
                     {
@@ -97,10 +87,10 @@ namespace CorpAppLab1
             return recipesList;
         }
 
-        public Recipe GetRecipeByDishName(string recipeDishName)
-        {
-            return GetAllRecipes().FirstOrDefault(x => x.DishName == recipeDishName);
-        }
+        //public Recipe GetRecipeByDishName(string recipeDishName)
+        //{
+        //    return GetAllRecipes().FirstOrDefault(x => x.DishName == recipeDishName);
+        //}
 
         public void UpdateRecipe(int dishID, int ingredientID,int quantitity)
         {

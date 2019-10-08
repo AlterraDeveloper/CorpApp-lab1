@@ -10,12 +10,11 @@ namespace CorpAppLab1
     {
         public Recipe()
         {
-            IngredientsAsString = new List<string>();
+            IngredientIdsAndQuantities = new Dictionary<int, int>();
         }
 
         public int DishID { get; set; }
-        public string DishName { get; set; }
-        public int DishPrice { get; set; }
-        public List<string> IngredientsAsString { get; set; }
+
+        public Dictionary<int, int> IngredientIdsAndQuantities;
     }
 }

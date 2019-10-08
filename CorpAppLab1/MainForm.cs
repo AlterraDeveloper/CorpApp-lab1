@@ -126,24 +126,24 @@ namespace CorpAppLab1
 
             var recipes = new Repository(_connectionString).GetAllRecipes();
 
-            foreach (var recipe in recipes)
-            {
-                TreeNode dishNode = new TreeNode();
+            //foreach (var recipe in recipes)
+            //{
+            //    TreeNode dishNode = new TreeNode();
 
-                if (recipesTreeView.Nodes.ContainsKey(recipe.DishID.ToString()))
-                {
-                    dishNode = recipesTreeView.Nodes.Find(recipe.DishID.ToString(), false).First();
-                }
-                else
-                {
-                    dishNode = recipesTreeView.Nodes.Add(recipe.DishID.ToString(), recipe.DishName);
-                }
+            //    if (recipesTreeView.Nodes.ContainsKey(recipe.DishID.ToString()))
+            //    {
+            //        dishNode = recipesTreeView.Nodes.Find(recipe.DishID.ToString(), false).First();
+            //    }
+            //    else
+            //    {
+            //        dishNode = recipesTreeView.Nodes.Add(recipe.DishID.ToString(), recipe.DishName);
+            //    }
 
-                foreach (var ingredient in recipe.IngredientsAsString)
-                {
-                    dishNode.Nodes.Add(ingredient);
-                }
-            }
+            //    foreach (var ingredient in recipe.IngredientsAsString)
+            //    {
+            //        dishNode.Nodes.Add(ingredient);
+            //    }
+            //}
         }
 
         private void btnAddRecipe_Click(object sender, EventArgs e)
@@ -160,13 +160,13 @@ namespace CorpAppLab1
         {
             if (e.Node.Parent == null)
             {
-                var repo = new Repository(_connectionString);
-                var dishName = e.Node.Text;
-                var recipe = repo.GetRecipeByDishName(dishName);
-                recipe.Dishes = repo.GetAllDishes();
-                recipe.Ingredients = repo.GetAllIngredients();
-                var dialogResult = new AddOrEditRecipeForm(recipe, _connectionString).ShowDialog(this);
-                if (dialogResult == DialogResult.Cancel) FillOrRefreshGridOfRecipes();
+                //var repo = new Repository(_connectionString);
+                //var dishName = e.Node.Text;
+                //var recipe = repo.GetRecipeByDishName(dishName);
+                //recipe.Dishes = repo.GetAllDishes();
+                //recipe.Ingredients = repo.GetAllIngredients();
+                //var dialogResult = new AddOrEditRecipeForm(recipe, _connectionString).ShowDialog(this);
+                //if (dialogResult == DialogResult.Cancel) FillOrRefreshGridOfRecipes();
             }
         }
         #endregion

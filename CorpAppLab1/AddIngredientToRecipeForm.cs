@@ -35,7 +35,7 @@ namespace CorpAppLab1
                 if (ingredientId > 0)
                 {
                     repo.UpdateRecipe(_recipe.DishID,ingredientId,(int) inputQuantity.Value);
-                    _recipe.IngredientsAsString.Add(comboBoxIngredients.Text + " " +  inputQuantity.Value + " " + labelUnitName.Text);
+                    //_recipe.IngredientsAsString.Add(comboBoxIngredients.Text + " " +  inputQuantity.Value + " " + labelUnitName.Text);
                     Close();
                 }
                 else
