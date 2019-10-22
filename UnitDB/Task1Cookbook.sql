@@ -1,3 +1,5 @@
+CREATE DATABASE Task1Cookbook_Kiselev; 
+
 USE Task1Cookbook_Kiselev;
 
 CREATE TABLE dbo.Dishes (

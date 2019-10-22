@@ -1,4 +1,5 @@
-﻿using System;
+﻿using CorpAppLab1.DataAccessLayer;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
@@ -41,7 +42,8 @@ namespace CorpAppLab1
                 return;
             }
 
-            var repo = new Repository(_connectionString);
+            var dishRepo = new DishRepository(_connectionString);
+            var unitRepo = new UnitRepository(_connectionString);
 
             try
             {
@@ -52,11 +54,11 @@ namespace CorpAppLab1
 
                     if (dish.DishID == 0)
                     {
-                        repo.AddDish(dish);
+                        dishRepo.Create(dish);
                     }
                     else
                     {
-                        repo.UpdateDish(dish);
+                        dishRepo.Update(dish);
                     }
                 }
             }
@@ -77,11 +79,11 @@ namespace CorpAppLab1
 
                     if (unit.UnitID == 0)
                     {
-                        repo.AddUnit(unit);
+                        unitRepo.Create(unit);
                     }
                     else
                     {
-                        repo.UpdateUnit(unit);
+                        unitRepo.Update(unit);
                     }
                 }
             }

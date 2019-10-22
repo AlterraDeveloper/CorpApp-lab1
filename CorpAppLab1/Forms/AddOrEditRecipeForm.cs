@@ -1,4 +1,5 @@
-﻿using System;
+﻿using CorpAppLab1.DataAccessLayer;
+using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Linq;
@@ -59,10 +60,10 @@ namespace CorpAppLab1
         private void comboBoxDishes_SelectedValueChanged(object sender, EventArgs e)
         {
             var repo = new Repository(_connectionString);
-            var dishID = repo.GetDishIDbyName(comboBoxDishes.Text);
-            if (dishID > 0)
+            var dish = new DishRepository(_connectionString).GetByName(comboBoxDishes.Text);
+            if (dish != null)
             {
-                _recipe = repo.GetAllRecipes().FirstOrDefault(x => x.DishID == dishID);
+                _recipe = repo.GetAllRecipes().FirstOrDefault(x => x.DishID == dish.DishID);
                 if (_recipe != null)
                 {
                     listBoxIngredients.DataSource = null;
@@ -71,7 +72,7 @@ namespace CorpAppLab1
                 else
                 {
                     _recipe = new Recipe();
-                    _recipe.DishID = dishID;
+                    _recipe.DishID = dish.DishID;
                     _recipe.Ingredients = repo.GetAllIngredients();
                 }
             }

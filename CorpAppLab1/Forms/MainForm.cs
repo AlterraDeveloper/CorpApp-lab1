@@ -1,4 +1,5 @@
-﻿using Microsoft.Data.ConnectionUI;
+﻿using CorpAppLab1.DataAccessLayer;
+using Microsoft.Data.ConnectionUI;
 using Project;
 using System;
 using System.Data.SqlClient;
@@ -150,7 +151,7 @@ namespace CorpAppLab1
         {
             var repo = new Repository(_connectionString);
             var recipe = new Recipe();
-            recipe.Dishes = repo.GetAllDishes();
+            recipe.Dishes = new DishRepository(_connectionString).GetAll();
             recipe.Ingredients = repo.GetAllIngredients();
             var dialogResult = new AddOrEditRecipeForm(recipe, _connectionString).ShowDialog(this);
             if (dialogResult == DialogResult.Cancel) FillOrRefreshGridOfRecipes();
@@ -204,7 +205,7 @@ namespace CorpAppLab1
         private void addIngredient_Click(object sender, EventArgs e)
         {
             var ingredient = new Ingredient();
-            ingredient.Units = new Repository(_connectionString).GetAllUnits();
+            ingredient.Units = new UnitRepository(_connectionString).GetAll();
 
             var dialogResult = new AddOrEditIngredientForm(ingredient, _connectionString).ShowDialog(this);
             if (dialogResult == DialogResult.OK) FillOrRefreshGridOfIngredients();
@@ -214,7 +215,7 @@ namespace CorpAppLab1
         {
             var selectedIngredientRow = ingredientsDataGrid.SelectedRows[0];
             var selectedIngredient = ((Ingredient)selectedIngredientRow.DataBoundItem);
-            selectedIngredient.Units = new Repository(_connectionString).GetAllUnits();
+            selectedIngredient.Units = new UnitRepository(_connectionString).GetAll();
             var dialogResult = new AddOrEditIngredientForm(selectedIngredient, _connectionString).ShowDialog(this);
             if (dialogResult == DialogResult.OK) FillOrRefreshGridOfIngredients();
         }
@@ -238,7 +239,7 @@ namespace CorpAppLab1
 
         private void FillOrRefreshGridOfDishes()
         {
-            var dishes = new Repository(_connectionString).GetAllDishes();
+            var dishes = new DishRepository(_connectionString).GetAll();
 
             dataGridViewDishes.DataSource = dishes;
 
@@ -282,14 +283,14 @@ namespace CorpAppLab1
             var dialogResult = MessageBox.Show($"Вы действительно хотите удалить блюдо : {selectedDish.DishName} ?", "Предупреждение", MessageBoxButtons.YesNo);
             if (dialogResult == DialogResult.Yes)
             {
-                new Repository(_connectionString).DeleteDish(selectedDish.DishID);
+                new DishRepository(_connectionString).Delete(selectedDish.DishID);
                 FillOrRefreshGridOfDishes();
             }
         }
 
         private void FillOrRefreshGridOfUnits()
         {
-            var units = new Repository(_connectionString).GetAllUnits();
+            var units = new UnitRepository(_connectionString).GetAll();
 
             dataGridViewUnits.DataSource = units;
 
@@ -333,7 +334,7 @@ namespace CorpAppLab1
             var dialogResult = MessageBox.Show($"Вы действительно хотите удалить единицу измерения : {selectedUnit.UnitName} ?", "Предупреждение", MessageBoxButtons.YesNo);
             if (dialogResult == DialogResult.Yes)
             {
-                new Repository(_connectionString).DeleteUnit(selectedUnit.UnitID);
+                new UnitRepository(_connectionString).Delete(selectedUnit.UnitID);
                 FillOrRefreshGridOfUnits();
             }
         }
