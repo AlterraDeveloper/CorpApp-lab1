@@ -9,18 +9,16 @@ namespace CorpAppLab1
 {
     internal class UnitRepository : IRepository<Unit>
     {
-        private string _connectionString;
-
-        public string ConnectionString => _connectionString;
+        public string ConnectionString { get; }
 
         public UnitRepository(string connectionString)
         {
-            _connectionString = connectionString;
+            ConnectionString = connectionString;
         }
 
         public void Create(Unit unit)
         {
-            using (SqlConnection sqlConnection = new SqlConnection(_connectionString))
+            using (SqlConnection sqlConnection = new SqlConnection(ConnectionString))
             {
                 var cmd = new SqlCommand(
                     $"insert into dbo.Units (UnitName) Values(N'{unit.UnitName}');", sqlConnection);
@@ -35,7 +33,7 @@ namespace CorpAppLab1
 
         public void Delete(int id)
         {
-            using (SqlConnection sqlConnection = new SqlConnection(_connectionString))
+            using (SqlConnection sqlConnection = new SqlConnection(ConnectionString))
             {
                 var queryString = $@"BEGIN TRANSACTION;
 				DELETE FROM dbo.IngredientsInDishes WHERE IngredientID in 
@@ -58,7 +56,7 @@ namespace CorpAppLab1
         {
             var unitsList = new List<Unit>();
 
-            using (SqlConnection sqlConnection = new SqlConnection(_connectionString))
+            using (SqlConnection sqlConnection = new SqlConnection(ConnectionString))
             {
                 var cmd = new SqlCommand(
                     @"SELECT 
@@ -88,7 +86,7 @@ namespace CorpAppLab1
         {
             var unit = new Unit();
 
-            using (SqlConnection sqlConnection = new SqlConnection(_connectionString))
+            using (SqlConnection sqlConnection = new SqlConnection(ConnectionString))
             {
                 var cmd = new SqlCommand(
                     string.Format(@"SELECT 
@@ -116,7 +114,7 @@ namespace CorpAppLab1
 
         public void Update(Unit unit)
         {
-            using (SqlConnection sqlConnection = new SqlConnection(_connectionString))
+            using (SqlConnection sqlConnection = new SqlConnection(ConnectionString))
             {
                 var cmd = new SqlCommand(
                     $"UPDATE dbo.Units SET UnitName = N'{unit.UnitName}' WHERE UnitID  = {unit.UnitID};", sqlConnection);

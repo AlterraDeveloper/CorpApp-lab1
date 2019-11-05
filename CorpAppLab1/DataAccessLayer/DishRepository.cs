@@ -1,26 +1,20 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Data.SqlClient;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace CorpAppLab1.DataAccessLayer
 {
     internal class DishRepository : IRepository<Dish>
     {
-        private string _connectionString;
-
-        public string ConnectionString => _connectionString;
+        public string ConnectionString { get; }
 
         public DishRepository(string connectionString)
         {
-            _connectionString = connectionString;
+            ConnectionString = connectionString;
         }
 
         public void Create(Dish dish)
         {
-            using (SqlConnection sqlConnection = new SqlConnection(_connectionString))
+            using (SqlConnection sqlConnection = new SqlConnection(ConnectionString))
             {
                 var cmd = new SqlCommand(
                     $"insert into dbo.Dishes (DishName) Values(N'{dish.DishName}');", sqlConnection);
@@ -35,7 +29,7 @@ namespace CorpAppLab1.DataAccessLayer
 
         public void Delete(int id)
         {
-            using (SqlConnection sqlConnection = new SqlConnection(_connectionString))
+            using (SqlConnection sqlConnection = new SqlConnection(ConnectionString))
             {
                 var queryString = $@"BEGIN TRANSACTION;
                 DELETE FROM dbo.IngredientsInDishes WHERE DishID = {id};
@@ -56,7 +50,7 @@ namespace CorpAppLab1.DataAccessLayer
         {
             var dishesList = new List<Dish>();
 
-            using (SqlConnection sqlConnection = new SqlConnection(_connectionString))
+            using (SqlConnection sqlConnection = new SqlConnection(ConnectionString))
             {
                 var cmd = new SqlCommand(
                     @"SELECT 
@@ -86,7 +80,7 @@ namespace CorpAppLab1.DataAccessLayer
         {
             var dish = new Dish();
 
-            using (SqlConnection sqlConnection = new SqlConnection(_connectionString))
+            using (SqlConnection sqlConnection = new SqlConnection(ConnectionString))
             {
                 var cmd = new SqlCommand(
                     string.Format(@"SELECT 
@@ -100,7 +94,7 @@ namespace CorpAppLab1.DataAccessLayer
 
                 while (reader.Read())
                 {
-                    dish= new Dish
+                    dish = new Dish
                     {
                         DishID = int.Parse(reader[0].ToString()),
                         DishName = reader[1].ToString()
@@ -114,7 +108,7 @@ namespace CorpAppLab1.DataAccessLayer
 
         public void Update(Dish dish)
         {
-            using (SqlConnection sqlConnection = new SqlConnection(_connectionString))
+            using (SqlConnection sqlConnection = new SqlConnection(ConnectionString))
             {
                 var cmd = new SqlCommand(
                     $"UPDATE dbo.Dishes SET DishName = N'{dish.DishName}' WHERE DishID  = {dish.DishID};", sqlConnection);
@@ -131,7 +125,7 @@ namespace CorpAppLab1.DataAccessLayer
         {
             var dish = new Dish();
 
-            using (SqlConnection sqlConnection = new SqlConnection(_connectionString))
+            using (SqlConnection sqlConnection = new SqlConnection(ConnectionString))
             {
                 var cmd = new SqlCommand(
                     string.Format(@"SELECT 

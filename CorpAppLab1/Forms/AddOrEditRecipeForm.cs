@@ -4,6 +4,8 @@ using System.Collections.Generic;
 using System.Data;
 using System.Linq;
 using System.Windows.Forms;
+using CorpAppLab1.Forms;
+using RecipeRepository = CorpAppLab1.DataAccessLayer.RecipeRepository;
 
 namespace CorpAppLab1
 {
@@ -26,54 +28,52 @@ namespace CorpAppLab1
             else
             {
                 Text = "Редактировать рецепт";
-                //comboBoxDishes.SelectedItem = _recipe.DishName;
                 comboBoxDishes.Enabled = false;
-                //listBoxIngredients.DataSource = _recipe.IngredientsAsString;
             }
 
-            var existingRecipes = new Repository(_connectionString).GetAllRecipes().Select(x => x.DishID);
-           
+            var existingRecipes = new RecipeRepository(_connectionString).GetAll().Select(x => x.DishID);
+
             comboBoxDishes.DataSource = _recipe.Dishes.Where(x => !existingRecipes.Contains(x.DishID)).Select(d => d.DishName).OrderBy(x => x).ToList();
         }
 
         private void btnAddIngredient_Click(object sender, EventArgs e)
         {
             new AddIngredientToRecipeForm(ref _recipe,_connectionString).ShowDialog(this);
-            listBoxIngredients.DataSource = null;
-            //listBoxIngredients.DataSource = _recipe.IngredientsAsString;
+            fillListBox();
         }
 
         private void btnSave_Click(object sender, EventArgs e)
         {
-            //_recipe.IngredientsAsString = (List<string>)listBoxIngredients.DataSource;
-
-            //if (_recipe.IngredientsAsString != null && _recipe.IngredientsAsString.Count > 0)
-            //{
-            //    Close();
-            //}
-            //else
-            //{
-            //    MessageBox.Show("Добавьте ингредиенты", "Предупреждение", MessageBoxButtons.OK);
-            //}
+            if (listBoxIngredients.Items.Count > 0)
+            {
+                new RecipeRepository(_connectionString).Update(_recipe);
+                Close();
+            }
+            else
+            {
+                MessageBox.Show("Добавьте ингредиенты", "Предупреждение", MessageBoxButtons.OK);
+            }
         }
 
         private void comboBoxDishes_SelectedValueChanged(object sender, EventArgs e)
         {
-            var repo = new Repository(_connectionString);
             var dish = new DishRepository(_connectionString).GetByName(comboBoxDishes.Text);
+
             if (dish != null)
             {
-                _recipe = repo.GetAllRecipes().FirstOrDefault(x => x.DishID == dish.DishID);
+                _recipe = new RecipeRepository(_connectionString).GetAll().FirstOrDefault(x => x.DishID == dish.DishID);
+
                 if (_recipe != null)
                 {
-                    listBoxIngredients.DataSource = null;
-                    //listBoxIngredients.DataSource = _recipe.IngredientsAsString;
+                   fillListBox();
                 }
                 else
                 {
-                    _recipe = new Recipe();
-                    _recipe.DishID = dish.DishID;
-                    _recipe.Ingredients = repo.GetAllIngredients();
+                    _recipe = new Recipe
+                    {
+                        DishID = dish.DishID,
+                        Ingredients = new IngredientRepository(_connectionString).GetAll()
+                    };
                 }
             }
             else
@@ -81,6 +81,20 @@ namespace CorpAppLab1
                 MessageBox.Show($"Блюда {comboBoxDishes.Text} нет в справочнике", "Предупреждение", MessageBoxButtons.OK);
             }
             
+        }
+
+        private void fillListBox()
+        {
+            var listBoxDataSource = new List<string>();
+
+            foreach (var pair in _recipe.IngredientIdsAndQuantities)
+            {
+                var ingr = _recipe.Ingredients.FirstOrDefault(x => x.IngredientID == pair.Key);
+                var unitName = new UnitRepository(_connectionString).GetAll().FirstOrDefault(x => x.UnitID == ingr.UnitID).UnitName;
+                listBoxDataSource.Add(ingr.IngredientName + " " + pair.Value + " " + unitName);
+            }
+
+            listBoxIngredients.DataSource = listBoxDataSource;
         }
     }
 }

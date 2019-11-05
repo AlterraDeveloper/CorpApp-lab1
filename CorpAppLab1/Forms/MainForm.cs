@@ -125,34 +125,39 @@ namespace CorpAppLab1
         {
             recipesTreeView.Nodes.Clear();
 
-            var recipes = new Repository(_connectionString).GetAllRecipes();
+            var recipes = new RecipeRepository(_connectionString).GetAll();
 
-            //foreach (var recipe in recipes)
-            //{
-            //    TreeNode dishNode = new TreeNode();
+            foreach (var recipe in recipes)
+            {
+                TreeNode dishNode = new TreeNode();
 
-            //    if (recipesTreeView.Nodes.ContainsKey(recipe.DishID.ToString()))
-            //    {
-            //        dishNode = recipesTreeView.Nodes.Find(recipe.DishID.ToString(), false).First();
-            //    }
-            //    else
-            //    {
-            //        dishNode = recipesTreeView.Nodes.Add(recipe.DishID.ToString(), recipe.DishName);
-            //    }
+                if (recipesTreeView.Nodes.ContainsKey(recipe.DishID.ToString()))
+                {
+                    dishNode = recipesTreeView.Nodes.Find(recipe.DishID.ToString(), false).First();
+                }
+                else
+                {
+                    var dishName = new DishRepository(_connectionString).GetById(recipe.DishID)?.DishName;
+                    dishNode = recipesTreeView.Nodes.Add(recipe.DishID.ToString(), dishName);
+                }
 
-            //    foreach (var ingredient in recipe.IngredientsAsString)
-            //    {
-            //        dishNode.Nodes.Add(ingredient);
-            //    }
-            //}
+                foreach (var pair in recipe.IngredientIdsAndQuantities)
+                {
+                    var ingr = new IngredientRepository(_connectionString).GetById(pair.Key);
+                    var unitName = new UnitRepository(_connectionString).GetAll().FirstOrDefault(x => x.UnitID == ingr.UnitID).UnitName;
+                    dishNode.Nodes.Add(ingr.IngredientName + " " + pair.Value + " " + unitName);
+                }
+            }
         }
 
         private void btnAddRecipe_Click(object sender, EventArgs e)
         {
-            var repo = new Repository(_connectionString);
-            var recipe = new Recipe();
-            recipe.Dishes = new DishRepository(_connectionString).GetAll();
-            recipe.Ingredients = repo.GetAllIngredients();
+            var recipe = new Recipe
+            {
+                Dishes = new DishRepository(_connectionString).GetAll(),
+                Ingredients = new IngredientRepository(_connectionString).GetAll(),
+                Units = new UnitRepository(_connectionString).GetAll(),
+            };
             var dialogResult = new AddOrEditRecipeForm(recipe, _connectionString).ShowDialog(this);
             if (dialogResult == DialogResult.Cancel) FillOrRefreshGridOfRecipes();
         }
@@ -191,7 +196,7 @@ namespace CorpAppLab1
 
         private void FillOrRefreshGridOfIngredients()
         {
-            var ingredients = new Repository(_connectionString).GetAllIngredients();
+            var ingredients = new IngredientRepository(_connectionString).GetAll();
 
             ingredientsDataGrid.DataSource = ingredients;
 
@@ -227,7 +232,7 @@ namespace CorpAppLab1
             var dialogResult = MessageBox.Show($"Вы действительно хотите удалить ингредиент : {selectedIngredient.IngredientName} ?", "Предупреждение", MessageBoxButtons.YesNo);
             if (dialogResult == DialogResult.Yes)
             {
-                new Repository(_connectionString).DeleteIngredient(selectedIngredient.IngredientID);
+                new IngredientRepository(_connectionString).Delete(selectedIngredient.IngredientID);
                 FillOrRefreshGridOfIngredients();
             }
         }

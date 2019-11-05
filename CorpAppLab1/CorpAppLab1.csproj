@@ -53,6 +53,8 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="DataAccessLayer\DishRepository.cs" />
+    <Compile Include="DataAccessLayer\IngredientRepository.cs" />
+    <Compile Include="DataAccessLayer\RecipeRepository.cs" />
     <Compile Include="Forms\AddIngredientToRecipeForm.cs">
       <SubType>Form</SubType>
     </Compile>

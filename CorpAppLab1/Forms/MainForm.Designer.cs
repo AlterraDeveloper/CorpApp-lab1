@@ -120,6 +120,7 @@
             this.txtBoxConnectionString.Location = new System.Drawing.Point(21, 118);
             this.txtBoxConnectionString.Multiline = true;
             this.txtBoxConnectionString.Name = "txtBoxConnectionString";
+            this.txtBoxConnectionString.ReadOnly = true;
             this.txtBoxConnectionString.Size = new System.Drawing.Size(566, 223);
             this.txtBoxConnectionString.TabIndex = 3;
             this.txtBoxConnectionString.TextChanged += new System.EventHandler(this.txtBoxConnectionString_TextChanged);
@@ -405,21 +406,21 @@
             // addUnit
             // 
             this.addUnit.Name = "addUnit";
-            this.addUnit.Size = new System.Drawing.Size(180, 22);
+            this.addUnit.Size = new System.Drawing.Size(154, 22);
             this.addUnit.Text = "Добавить";
             this.addUnit.Click += new System.EventHandler(this.addUnit_Click);
             // 
             // editUnit
             // 
             this.editUnit.Name = "editUnit";
-            this.editUnit.Size = new System.Drawing.Size(180, 22);
+            this.editUnit.Size = new System.Drawing.Size(154, 22);
             this.editUnit.Text = "Редактировать";
             this.editUnit.Click += new System.EventHandler(this.editUnit_Click);
             // 
             // deleteUnit
             // 
             this.deleteUnit.Name = "deleteUnit";
-            this.deleteUnit.Size = new System.Drawing.Size(180, 22);
+            this.deleteUnit.Size = new System.Drawing.Size(154, 22);
             this.deleteUnit.Text = "Удалить";
             this.deleteUnit.Click += new System.EventHandler(this.deleteUnit_Click);
             // 

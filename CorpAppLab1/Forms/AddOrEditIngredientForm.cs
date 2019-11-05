@@ -8,6 +8,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using CorpAppLab1.DataAccessLayer;
 
 namespace CorpAppLab1
 {
@@ -49,11 +50,11 @@ namespace CorpAppLab1
             {
                 if (_ingredient.IngredientID == 0)
                 {
-                    new Repository(_connectionString).AddIngredient(_ingredient);
+                    new IngredientRepository(_connectionString).Create(_ingredient);
                 }
                 else
                 {
-                    new Repository(_connectionString).UpdateIngredient(_ingredient);
+                    new IngredientRepository(_connectionString).Update(_ingredient);
                 }
 
                 DialogResult = DialogResult.OK;

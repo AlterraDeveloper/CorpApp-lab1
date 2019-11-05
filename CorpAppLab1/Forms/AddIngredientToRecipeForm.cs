@@ -1,17 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Data;
 using System.Data.SqlClient;
 using System.Linq;
 using System.Windows.Forms;
 
-namespace CorpAppLab1
+namespace CorpAppLab1.Forms
 {
     public partial class AddIngredientToRecipeForm : Form
     {
         private Recipe _recipe;
         private List<Ingredient> _ingredients;
-        private string _connectionString;
 
         public AddIngredientToRecipeForm(ref Recipe recipe,string connectionString)
         {
@@ -20,22 +18,29 @@ namespace CorpAppLab1
             inputQuantity.Maximum = Decimal.MaxValue;
             _recipe = recipe;
             _ingredients = _recipe.Ingredients;
-            _connectionString = connectionString;
 
-            comboBoxIngredients.DataSource = _ingredients.Select(x => x.IngredientName).OrderBy(x => x).ToList();
+            comboBoxIngredients.DisplayMember = "IngredientName";
+            comboBoxIngredients.ValueMember = "IngredientID";
+            comboBoxIngredients.DataSource = _ingredients.OrderBy(x => x.IngredientName).ToList();
             
         }
 
         private void btnAdd_Click(object sender, EventArgs e)
         {
-            var repo = new Repository(_connectionString);
+            
             try
             {
-                var ingredientId = repo.GetIngredientIDByName(comboBoxIngredients.Text);
-                if (ingredientId > 0)
+                var ingredientId = ((Ingredient) comboBoxIngredients.SelectedItem)?.IngredientID;
+                if (ingredientId != null)
                 {
-                    repo.UpdateRecipe(_recipe.DishID,ingredientId,(int) inputQuantity.Value);
-                    //_recipe.IngredientsAsString.Add(comboBoxIngredients.Text + " " +  inputQuantity.Value + " " + labelUnitName.Text);
+                    if (_recipe.IngredientIdsAndQuantities.ContainsKey((int) ingredientId))
+                    {
+                        _recipe.IngredientIdsAndQuantities[(int) ingredientId] = (int) inputQuantity.Value;
+                    }
+                    else
+                    {
+                        _recipe.IngredientIdsAndQuantities.Add((int)ingredientId,(int)inputQuantity.Value);
+                    }
                     Close();
                 }
                 else
@@ -52,9 +57,10 @@ namespace CorpAppLab1
             }
         }
 
-        private void comboBoxIngredients_SelectedValueChanged(object sender, EventArgs e)
+        private void comboBoxIngredients_SelectedIndexChanged(object sender, EventArgs e)
         {
-            labelUnitName.Text = _ingredients.FirstOrDefault(x => x.IngredientName == comboBoxIngredients.Text).auxUnitName;
+            var selectedIngredient = (Ingredient)comboBoxIngredients.SelectedItem;
+            labelUnitName.Text = _ingredients.FirstOrDefault(x => x.IngredientName == selectedIngredient.IngredientName).auxUnitName;
         }
     }
 }
