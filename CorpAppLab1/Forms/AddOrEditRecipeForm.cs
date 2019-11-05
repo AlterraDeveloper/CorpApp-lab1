@@ -1,10 +1,13 @@
 ﻿using CorpAppLab1.DataAccessLayer;
+using CorpAppLab1.Forms;
 using System;
 using System.Collections.Generic;
 using System.Data;
+using System.Drawing;
 using System.Linq;
+using System.Text.RegularExpressions;
 using System.Windows.Forms;
-using CorpAppLab1.Forms;
+using DishRepository = CorpAppLab1.DataAccessLayer.DishRepository;
 using RecipeRepository = CorpAppLab1.DataAccessLayer.RecipeRepository;
 
 namespace CorpAppLab1
@@ -20,26 +23,28 @@ namespace CorpAppLab1
 
             _connectionString = connString;
             _recipe = recipe;
-            
+
             if (_recipe.DishID == 0)
             {
                 Text = "Добавить рецепт";
+
+                var existingRecipes = new RecipeRepository(_connectionString).GetAll().Select(x => x.DishID);
+
+                comboBoxDishes.DataSource = _recipe.Dishes.Where(x => !existingRecipes.Contains(x.DishID)).Select(d => d.DishName).OrderBy(x => x).ToList();
             }
             else
             {
                 Text = "Редактировать рецепт";
                 comboBoxDishes.Enabled = false;
+                comboBoxDishes.Text = new DishRepository(_connectionString).GetById(recipe.DishID).DishName;
+                FillListBox();
             }
-
-            var existingRecipes = new RecipeRepository(_connectionString).GetAll().Select(x => x.DishID);
-
-            comboBoxDishes.DataSource = _recipe.Dishes.Where(x => !existingRecipes.Contains(x.DishID)).Select(d => d.DishName).OrderBy(x => x).ToList();
         }
 
         private void btnAddIngredient_Click(object sender, EventArgs e)
         {
             new AddIngredientToRecipeForm(ref _recipe,_connectionString).ShowDialog(this);
-            fillListBox();
+            FillListBox();
         }
 
         private void btnSave_Click(object sender, EventArgs e)
@@ -55,7 +60,7 @@ namespace CorpAppLab1
             }
         }
 
-        private void comboBoxDishes_SelectedValueChanged(object sender, EventArgs e)
+        private void comboBoxDishes_SelectedIndexChanged(object sender, EventArgs e)
         {
             var dish = new DishRepository(_connectionString).GetByName(comboBoxDishes.Text);
 
@@ -65,7 +70,7 @@ namespace CorpAppLab1
 
                 if (_recipe != null)
                 {
-                   fillListBox();
+                    FillListBox();
                 }
                 else
                 {
@@ -80,10 +85,9 @@ namespace CorpAppLab1
             {
                 MessageBox.Show($"Блюда {comboBoxDishes.Text} нет в справочнике", "Предупреждение", MessageBoxButtons.OK);
             }
-            
         }
 
-        private void fillListBox()
+        private void FillListBox()
         {
             var listBoxDataSource = new List<string>();
 
@@ -95,6 +99,36 @@ namespace CorpAppLab1
             }
 
             listBoxIngredients.DataSource = listBoxDataSource;
+        }
+
+        private void deleteIngredientFromRecipe_Click(object sender, EventArgs e)
+        {
+            var ingredientRecord = (string)listBoxIngredients.SelectedItem;
+            var ingredientName = ingredientRecord.Remove(Regex.Match(ingredientRecord, "\\d").Index).Trim();
+            var ingredientId = _recipe.Ingredients.First(x => x.IngredientName == ingredientName).IngredientID;
+            new RecipeRepository(_connectionString).Delete(_recipe.DishID,ingredientId);
+            _recipe.IngredientIdsAndQuantities.Remove(ingredientId);
+            FillListBox();
+        }
+
+        private void listBoxIngredients_MouseClick(object sender, MouseEventArgs e)
+        {
+            if (e.Button == MouseButtons.Right)
+            {
+                listBoxIngredients.SetSelected(listBoxIngredients.IndexFromPoint(new Point(e.X, e.Y)), true);
+
+                contextMenuStripIngredients.Show(listBoxIngredients,new Point(e.X,e.Y));
+            }
+        }
+
+        private void listBoxIngredients_MouseDown(object sender, MouseEventArgs e)
+        {
+            if (e.Button == MouseButtons.Right)
+            {
+                listBoxIngredients.SetSelected(listBoxIngredients.IndexFromPoint(new Point(e.X, e.Y)), true);
+
+                contextMenuStripIngredients.Show(listBoxIngredients, new Point(e.X, e.Y));
+            }
         }
     }
 }

@@ -28,12 +28,16 @@
         /// </summary>
         private void InitializeComponent()
         {
+            this.components = new System.ComponentModel.Container();
             this.comboBoxDishes = new System.Windows.Forms.ComboBox();
             this.label1 = new System.Windows.Forms.Label();
             this.label2 = new System.Windows.Forms.Label();
             this.btnAddIngredient = new System.Windows.Forms.Button();
             this.listBoxIngredients = new System.Windows.Forms.ListBox();
             this.btnSave = new System.Windows.Forms.Button();
+            this.contextMenuStripIngredients = new System.Windows.Forms.ContextMenuStrip(this.components);
+            this.deleteIngredientFromRecipe = new System.Windows.Forms.ToolStripMenuItem();
+            this.contextMenuStripIngredients.SuspendLayout();
             this.SuspendLayout();
             // 
             // comboBoxDishes
@@ -43,7 +47,7 @@
             this.comboBoxDishes.Name = "comboBoxDishes";
             this.comboBoxDishes.Size = new System.Drawing.Size(280, 21);
             this.comboBoxDishes.TabIndex = 0;
-            this.comboBoxDishes.SelectedValueChanged += new System.EventHandler(this.comboBoxDishes_SelectedValueChanged);
+            this.comboBoxDishes.SelectedIndexChanged += new System.EventHandler(this.comboBoxDishes_SelectedIndexChanged);
             // 
             // label1
             // 
@@ -83,6 +87,8 @@
             this.listBoxIngredients.Name = "listBoxIngredients";
             this.listBoxIngredients.Size = new System.Drawing.Size(344, 160);
             this.listBoxIngredients.TabIndex = 5;
+            this.listBoxIngredients.MouseClick += new System.Windows.Forms.MouseEventHandler(this.listBoxIngredients_MouseClick);
+            this.listBoxIngredients.MouseDown += new System.Windows.Forms.MouseEventHandler(this.listBoxIngredients_MouseDown);
             // 
             // btnSave
             // 
@@ -93,6 +99,20 @@
             this.btnSave.Text = "Сохранить";
             this.btnSave.UseVisualStyleBackColor = true;
             this.btnSave.Click += new System.EventHandler(this.btnSave_Click);
+            // 
+            // contextMenuStripIngredients
+            // 
+            this.contextMenuStripIngredients.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.deleteIngredientFromRecipe});
+            this.contextMenuStripIngredients.Name = "contextMenuStripIngredients";
+            this.contextMenuStripIngredients.Size = new System.Drawing.Size(119, 26);
+            // 
+            // deleteIngredientFromRecipe
+            // 
+            this.deleteIngredientFromRecipe.Name = "deleteIngredientFromRecipe";
+            this.deleteIngredientFromRecipe.Size = new System.Drawing.Size(180, 22);
+            this.deleteIngredientFromRecipe.Text = "Удалить";
+            this.deleteIngredientFromRecipe.Click += new System.EventHandler(this.deleteIngredientFromRecipe_Click);
             // 
             // AddOrEditRecipeForm
             // 
@@ -107,6 +127,7 @@
             this.Controls.Add(this.comboBoxDishes);
             this.Name = "AddOrEditRecipeForm";
             this.Text = "AddOrEditRecipeForm";
+            this.contextMenuStripIngredients.ResumeLayout(false);
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -120,5 +141,7 @@
         private System.Windows.Forms.Button btnAddIngredient;
         private System.Windows.Forms.ListBox listBoxIngredients;
         private System.Windows.Forms.Button btnSave;
+        private System.Windows.Forms.ContextMenuStrip contextMenuStripIngredients;
+        private System.Windows.Forms.ToolStripMenuItem deleteIngredientFromRecipe;
     }
 }

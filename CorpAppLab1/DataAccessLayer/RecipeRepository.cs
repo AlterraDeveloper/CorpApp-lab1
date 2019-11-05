@@ -1,9 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Data.SqlClient;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace CorpAppLab1.DataAccessLayer
 {
@@ -135,6 +132,21 @@ namespace CorpAppLab1.DataAccessLayer
             using (var sqlConnection = new SqlConnection(ConnectionString))
             {
                 var cmd = new SqlCommand($@"delete from dbo.IngredientsInDishes where DishID = {dishId};",sqlConnection);
+
+                sqlConnection.Open();
+
+                cmd.ExecuteNonQuery();
+
+                sqlConnection.Close();
+
+            }
+        }
+
+        public void Delete(int dishId,int ingredientID)
+        {
+            using (var sqlConnection = new SqlConnection(ConnectionString))
+            {
+                var cmd = new SqlCommand($@"delete from dbo.IngredientsInDishes where DishID = {dishId} AND IngredientID = {ingredientID};", sqlConnection);
 
                 sqlConnection.Open();
 

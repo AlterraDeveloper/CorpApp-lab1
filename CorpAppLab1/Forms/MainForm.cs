@@ -7,6 +7,9 @@ using System.Drawing;
 using System.IO;
 using System.Linq;
 using System.Windows.Forms;
+using CorpAppLab1.Forms;
+using CorpAppLab1.Models;
+using RecipeRepository = CorpAppLab1.DataAccessLayer.RecipeRepository;
 
 namespace CorpAppLab1
 {
@@ -121,7 +124,7 @@ namespace CorpAppLab1
 
         #region actions on Recipes page
 
-        private void FillOrRefreshGridOfRecipes()
+        private void FillOrRefreshTreeOfRecipes()
         {
             recipesTreeView.Nodes.Clear();
 
@@ -150,7 +153,7 @@ namespace CorpAppLab1
             }
         }
 
-        private void btnAddRecipe_Click(object sender, EventArgs e)
+        private void addRecipe_Click(object sender, EventArgs e)
         {
             var recipe = new Recipe
             {
@@ -159,22 +162,64 @@ namespace CorpAppLab1
                 Units = new UnitRepository(_connectionString).GetAll(),
             };
             var dialogResult = new AddOrEditRecipeForm(recipe, _connectionString).ShowDialog(this);
-            if (dialogResult == DialogResult.Cancel) FillOrRefreshGridOfRecipes();
+            if (dialogResult == DialogResult.Cancel) FillOrRefreshTreeOfRecipes();
         }
 
-        private void recipesTreeView_NodeMouseDoubleClick(object sender, TreeNodeMouseClickEventArgs e)
+        private void editRecipe_Click(object sender, EventArgs e)
         {
-            if (e.Node.Parent == null)
+            var dishName = recipesTreeView.SelectedNode.Text;
+
+            var dishID = new DishRepository(_connectionString).GetAll().First(x => x.DishName == dishName).DishID;
+
+            var recipe = new RecipeRepository(_connectionString).GetById(dishID);
+            recipe.Dishes = new DishRepository(_connectionString).GetAll();
+            recipe.Ingredients = new IngredientRepository(_connectionString).GetAll();
+            recipe.Units = new UnitRepository(_connectionString).GetAll();
+
+            var dialogResult = new AddOrEditRecipeForm(recipe, _connectionString).ShowDialog(this);
+            if (dialogResult == DialogResult.Cancel) FillOrRefreshTreeOfRecipes();
+        }
+
+        private void deleteRecipe_Click(object sender, EventArgs e)
+        {
+            var dishName = recipesTreeView.SelectedNode.Text;
+
+            var dishID = new DishRepository(_connectionString).GetAll().First(x => x.DishName == dishName).DishID;
+
+            var dialogResult = MessageBox.Show($"Вы действительно хотите удалить рецепт : {dishName} ?", "Предупреждение", MessageBoxButtons.YesNo);
+            if (dialogResult == DialogResult.Yes)
             {
-                //var repo = new Repository(_connectionString);
-                //var dishName = e.Node.Text;
-                //var recipe = repo.GetRecipeByDishName(dishName);
-                //recipe.Dishes = repo.GetAllDishes();
-                //recipe.Ingredients = repo.GetAllIngredients();
-                //var dialogResult = new AddOrEditRecipeForm(recipe, _connectionString).ShowDialog(this);
-                //if (dialogResult == DialogResult.Cancel) FillOrRefreshGridOfRecipes();
+                new RecipeRepository(_connectionString).Delete(dishID);
+                FillOrRefreshTreeOfRecipes();
             }
         }
+
+        private void recipesTreeView_MouseClick(object sender, MouseEventArgs e)
+        {
+            if (e.Button == MouseButtons.Right)
+            {
+                var node = recipesTreeView.HitTest(e.X, e.Y).Node;
+
+                if (node != null && node.Parent == null)
+                {
+                    recipesTreeView.SelectedNode = node;
+                    foreach (ToolStripItem item in contextMenuStripRecipes.Items)
+                    {
+                        item.Enabled = true;
+                    }
+                }
+                else
+                {
+                    foreach (ToolStripItem item in contextMenuStripRecipes.Items)
+                    {
+                        item.Enabled = item.Text == "Добавить";
+                    }
+                }
+
+                contextMenuStripRecipes.Show(recipesTreeView, new Point(e.X, e.Y));
+            }
+        }
+
         #endregion
 
         #region actions on Ingredients page
@@ -321,7 +366,7 @@ namespace CorpAppLab1
         private void addUnit_Click(object sender, EventArgs e)
         {
             var dialogResult = new AddOrEditSimpleEntity(new Unit(), _connectionString).ShowDialog(this);
-            if(dialogResult == DialogResult.OK) FillOrRefreshGridOfUnits();
+            if (dialogResult == DialogResult.OK) FillOrRefreshGridOfUnits();
         }
 
         private void editUnit_Click(object sender, EventArgs e)
@@ -357,14 +402,67 @@ namespace CorpAppLab1
                         FillOrRefreshGridOfIngredients();
                         break;
                     case "recipesTabPage":
-                        FillOrRefreshGridOfRecipes();
+                        FillOrRefreshTreeOfRecipes();
                         break;
                     case "auxReferencesTabPane":
                         FillOrRefreshGridOfDishes();
                         FillOrRefreshGridOfUnits();
                         break;
+                    case "ordersTabPane":
+                        FillOrRefreshGridOfOrders();
+                        break;
                 }
             }
         }
+
+        #region actions on Orders page
+
+        private void dataGridView1_MouseClick(object sender, MouseEventArgs e)
+        {
+            if (e.Button == MouseButtons.Right)
+            {
+                contextMenuStripOrders.Show(ordersDataGridView, new Point(e.X, e.Y));
+            }
+        }
+
+        private void FillOrRefreshGridOfOrders()
+        {
+            var orders = new OrderRepository(_connectionString).GetAll();
+
+            ordersDataGridView.DataSource = orders;
+
+            ordersDataGridView.Columns[0].HeaderText = "Номер заказа";
+
+            ordersDataGridView.Columns[1].HeaderText = "Дата заказа";
+            ordersDataGridView.Columns[1].DefaultCellStyle.Format = "dddd, dd MMMM yyyy HH:mm:ss";
+
+            ordersDataGridView.Columns[2].HeaderText = "Сумма заказа";
+
+            ordersDataGridView.Columns[3].Visible = false;
+        }
+
+        private void addOrder_Click(object sender, EventArgs e)
+        {
+            var order = new Order
+            {
+                Dishes = new DishRepository(_connectionString).GetAll(),
+            };
+
+            new CreateOrderForm(order,_connectionString).ShowDialog(this);
+        }
+
+        private void createReport_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void showDetails_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        #endregion
+
+
     }
 }

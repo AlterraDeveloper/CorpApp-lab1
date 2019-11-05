@@ -42,13 +42,15 @@
             this.recipesTabPage = new System.Windows.Forms.TabPage();
             this.recipesTreeView = new System.Windows.Forms.TreeView();
             this.label1 = new System.Windows.Forms.Label();
-            this.btnAddRecipe = new System.Windows.Forms.Button();
             this.tabPane = new System.Windows.Forms.TabControl();
             this.auxReferencesTabPane = new System.Windows.Forms.TabPage();
             this.groupBox2 = new System.Windows.Forms.GroupBox();
             this.dataGridViewUnits = new System.Windows.Forms.DataGridView();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
             this.dataGridViewDishes = new System.Windows.Forms.DataGridView();
+            this.ordersTabPane = new System.Windows.Forms.TabPage();
+            this.label4 = new System.Windows.Forms.Label();
+            this.ordersDataGridView = new System.Windows.Forms.DataGridView();
             this.contextMenuStripIngredients = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.addIngredient = new System.Windows.Forms.ToolStripMenuItem();
             this.editIngredient = new System.Windows.Forms.ToolStripMenuItem();
@@ -61,6 +63,14 @@
             this.addUnit = new System.Windows.Forms.ToolStripMenuItem();
             this.editUnit = new System.Windows.Forms.ToolStripMenuItem();
             this.deleteUnit = new System.Windows.Forms.ToolStripMenuItem();
+            this.contextMenuStripOrders = new System.Windows.Forms.ContextMenuStrip(this.components);
+            this.addOrder = new System.Windows.Forms.ToolStripMenuItem();
+            this.createReport = new System.Windows.Forms.ToolStripMenuItem();
+            this.contextMenuStripRecipes = new System.Windows.Forms.ContextMenuStrip(this.components);
+            this.addRecipe = new System.Windows.Forms.ToolStripMenuItem();
+            this.editRecipe = new System.Windows.Forms.ToolStripMenuItem();
+            this.deleteRecipe = new System.Windows.Forms.ToolStripMenuItem();
+            this.showDetails = new System.Windows.Forms.ToolStripMenuItem();
             this.settingsTabPage.SuspendLayout();
             this.ingredientsTabPage.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.ingredientsDataGrid)).BeginInit();
@@ -71,9 +81,13 @@
             ((System.ComponentModel.ISupportInitialize)(this.dataGridViewUnits)).BeginInit();
             this.groupBox1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridViewDishes)).BeginInit();
+            this.ordersTabPane.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.ordersDataGridView)).BeginInit();
             this.contextMenuStripIngredients.SuspendLayout();
             this.contextMenuStripDishes.SuspendLayout();
             this.contextMenuStripUnits.SuspendLayout();
+            this.contextMenuStripOrders.SuspendLayout();
+            this.contextMenuStripRecipes.SuspendLayout();
             this.SuspendLayout();
             // 
             // settingsTabPage
@@ -203,7 +217,6 @@
             // 
             this.recipesTabPage.Controls.Add(this.recipesTreeView);
             this.recipesTabPage.Controls.Add(this.label1);
-            this.recipesTabPage.Controls.Add(this.btnAddRecipe);
             this.recipesTabPage.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.recipesTabPage.Location = new System.Drawing.Point(4, 22);
             this.recipesTabPage.Name = "recipesTabPage";
@@ -222,7 +235,7 @@
             this.recipesTreeView.Name = "recipesTreeView";
             this.recipesTreeView.Size = new System.Drawing.Size(735, 436);
             this.recipesTreeView.TabIndex = 4;
-            this.recipesTreeView.NodeMouseDoubleClick += new System.Windows.Forms.TreeNodeMouseClickEventHandler(this.recipesTreeView_NodeMouseDoubleClick);
+            this.recipesTreeView.MouseDown += new System.Windows.Forms.MouseEventHandler(this.recipesTreeView_MouseClick);
             // 
             // label1
             // 
@@ -234,18 +247,6 @@
             this.label1.TabIndex = 3;
             this.label1.Text = "Справочник рецептов";
             // 
-            // btnAddRecipe
-            // 
-            this.btnAddRecipe.BackColor = System.Drawing.Color.Transparent;
-            this.btnAddRecipe.BackgroundImageLayout = System.Windows.Forms.ImageLayout.None;
-            this.btnAddRecipe.Location = new System.Drawing.Point(643, 10);
-            this.btnAddRecipe.Name = "btnAddRecipe";
-            this.btnAddRecipe.Size = new System.Drawing.Size(103, 34);
-            this.btnAddRecipe.TabIndex = 1;
-            this.btnAddRecipe.Text = "Добавить";
-            this.btnAddRecipe.UseVisualStyleBackColor = true;
-            this.btnAddRecipe.Click += new System.EventHandler(this.btnAddRecipe_Click);
-            // 
             // tabPane
             // 
             this.tabPane.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
@@ -255,6 +256,7 @@
             this.tabPane.Controls.Add(this.recipesTabPage);
             this.tabPane.Controls.Add(this.ingredientsTabPage);
             this.tabPane.Controls.Add(this.auxReferencesTabPane);
+            this.tabPane.Controls.Add(this.ordersTabPane);
             this.tabPane.Location = new System.Drawing.Point(13, 13);
             this.tabPane.Name = "tabPane";
             this.tabPane.SelectedIndex = 0;
@@ -333,6 +335,49 @@
             this.dataGridViewDishes.Size = new System.Drawing.Size(343, 442);
             this.dataGridViewDishes.TabIndex = 3;
             this.dataGridViewDishes.MouseClick += new System.Windows.Forms.MouseEventHandler(this.dataGridViewDishes_MouseClick);
+            // 
+            // ordersTabPane
+            // 
+            this.ordersTabPane.Controls.Add(this.label4);
+            this.ordersTabPane.Controls.Add(this.ordersDataGridView);
+            this.ordersTabPane.Location = new System.Drawing.Point(4, 22);
+            this.ordersTabPane.Name = "ordersTabPane";
+            this.ordersTabPane.Padding = new System.Windows.Forms.Padding(3);
+            this.ordersTabPane.Size = new System.Drawing.Size(752, 492);
+            this.ordersTabPane.TabIndex = 4;
+            this.ordersTabPane.Text = "Заказы";
+            this.ordersTabPane.UseVisualStyleBackColor = true;
+            // 
+            // label4
+            // 
+            this.label4.AutoSize = true;
+            this.label4.Font = new System.Drawing.Font("Microsoft Sans Serif", 15.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label4.Location = new System.Drawing.Point(289, 22);
+            this.label4.Name = "label4";
+            this.label4.Size = new System.Drawing.Size(169, 25);
+            this.label4.TabIndex = 4;
+            this.label4.Text = "Реестр заказов";
+            // 
+            // ordersDataGridView
+            // 
+            this.ordersDataGridView.AllowUserToAddRows = false;
+            this.ordersDataGridView.AllowUserToDeleteRows = false;
+            this.ordersDataGridView.AllowUserToResizeRows = false;
+            this.ordersDataGridView.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.ordersDataGridView.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
+            this.ordersDataGridView.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.ordersDataGridView.Location = new System.Drawing.Point(6, 62);
+            this.ordersDataGridView.MultiSelect = false;
+            this.ordersDataGridView.Name = "ordersDataGridView";
+            this.ordersDataGridView.ReadOnly = true;
+            this.ordersDataGridView.RowHeadersVisible = false;
+            this.ordersDataGridView.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
+            this.ordersDataGridView.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
+            this.ordersDataGridView.Size = new System.Drawing.Size(740, 424);
+            this.ordersDataGridView.TabIndex = 3;
+            this.ordersDataGridView.MouseClick += new System.Windows.Forms.MouseEventHandler(this.dataGridView1_MouseClick);
             // 
             // contextMenuStripIngredients
             // 
@@ -424,6 +469,66 @@
             this.deleteUnit.Text = "Удалить";
             this.deleteUnit.Click += new System.EventHandler(this.deleteUnit_Click);
             // 
+            // contextMenuStripOrders
+            // 
+            this.contextMenuStripOrders.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.addOrder,
+            this.createReport,
+            this.showDetails});
+            this.contextMenuStripOrders.Name = "contextMenuStripOrders";
+            this.contextMenuStripOrders.Size = new System.Drawing.Size(192, 70);
+            // 
+            // addOrder
+            // 
+            this.addOrder.Name = "addOrder";
+            this.addOrder.Size = new System.Drawing.Size(191, 22);
+            this.addOrder.Text = "Создать заказ";
+            this.addOrder.Click += new System.EventHandler(this.addOrder_Click);
+            // 
+            // createReport
+            // 
+            this.createReport.Name = "createReport";
+            this.createReport.Size = new System.Drawing.Size(191, 22);
+            this.createReport.Text = "Сформировать отчет";
+            this.createReport.Click += new System.EventHandler(this.createReport_Click);
+            // 
+            // contextMenuStripRecipes
+            // 
+            this.contextMenuStripRecipes.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.addRecipe,
+            this.editRecipe,
+            this.deleteRecipe});
+            this.contextMenuStripRecipes.Name = "contextMenuStripIngredients";
+            this.contextMenuStripRecipes.Size = new System.Drawing.Size(155, 70);
+            // 
+            // addRecipe
+            // 
+            this.addRecipe.Name = "addRecipe";
+            this.addRecipe.Size = new System.Drawing.Size(154, 22);
+            this.addRecipe.Text = "Добавить";
+            this.addRecipe.Click += new System.EventHandler(this.addRecipe_Click);
+            // 
+            // editRecipe
+            // 
+            this.editRecipe.Name = "editRecipe";
+            this.editRecipe.Size = new System.Drawing.Size(154, 22);
+            this.editRecipe.Text = "Редактировать";
+            this.editRecipe.Click += new System.EventHandler(this.editRecipe_Click);
+            // 
+            // deleteRecipe
+            // 
+            this.deleteRecipe.Name = "deleteRecipe";
+            this.deleteRecipe.Size = new System.Drawing.Size(154, 22);
+            this.deleteRecipe.Text = "Удалить";
+            this.deleteRecipe.Click += new System.EventHandler(this.deleteRecipe_Click);
+            // 
+            // showDetails
+            // 
+            this.showDetails.Name = "showDetails";
+            this.showDetails.Size = new System.Drawing.Size(191, 22);
+            this.showDetails.Text = "Подробнее";
+            this.showDetails.Click += new System.EventHandler(this.showDetails_Click);
+            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -445,9 +550,14 @@
             ((System.ComponentModel.ISupportInitialize)(this.dataGridViewUnits)).EndInit();
             this.groupBox1.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.dataGridViewDishes)).EndInit();
+            this.ordersTabPane.ResumeLayout(false);
+            this.ordersTabPane.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.ordersDataGridView)).EndInit();
             this.contextMenuStripIngredients.ResumeLayout(false);
             this.contextMenuStripDishes.ResumeLayout(false);
             this.contextMenuStripUnits.ResumeLayout(false);
+            this.contextMenuStripOrders.ResumeLayout(false);
+            this.contextMenuStripRecipes.ResumeLayout(false);
             this.ResumeLayout(false);
 
         }
@@ -461,7 +571,6 @@
         private System.Windows.Forms.TabPage recipesTabPage;
         private System.Windows.Forms.TreeView recipesTreeView;
         private System.Windows.Forms.Label label1;
-        private System.Windows.Forms.Button btnAddRecipe;
         private System.Windows.Forms.TabControl tabPane;
         private System.Windows.Forms.Label label3;
         private System.Windows.Forms.Button btnSaveConnectionStringToFile;
@@ -486,6 +595,17 @@
         private System.Windows.Forms.ToolStripMenuItem addUnit;
         private System.Windows.Forms.ToolStripMenuItem editUnit;
         private System.Windows.Forms.ToolStripMenuItem deleteUnit;
+        private System.Windows.Forms.TabPage ordersTabPane;
+        private System.Windows.Forms.Label label4;
+        private System.Windows.Forms.DataGridView ordersDataGridView;
+        private System.Windows.Forms.ContextMenuStrip contextMenuStripOrders;
+        private System.Windows.Forms.ToolStripMenuItem addOrder;
+        private System.Windows.Forms.ToolStripMenuItem createReport;
+        private System.Windows.Forms.ContextMenuStrip contextMenuStripRecipes;
+        private System.Windows.Forms.ToolStripMenuItem addRecipe;
+        private System.Windows.Forms.ToolStripMenuItem editRecipe;
+        private System.Windows.Forms.ToolStripMenuItem deleteRecipe;
+        private System.Windows.Forms.ToolStripMenuItem showDetails;
     }
 }
 

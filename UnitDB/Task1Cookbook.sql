@@ -35,3 +35,21 @@ ALTER TABLE dbo.Units ADD CONSTRAINT AK_UnitName UNIQUE(UnitName);
 ALTER TABLE dbo.Dishes ADD CONSTRAINT AK_DishName UNIQUE(DishName);
 ALTER TABLE dbo.Ingredients ADD CONSTRAINT AK_IngredientName UNIQUE(IngredientName);
 ALTER TABLE dbo.IngredientsInDishes ADD CONSTRAINT AK_DishIngredientPair UNIQUE(DishID,IngredientID);
+
+CREATE TABLE dbo.Orders(
+	OrderID INT PRIMARY KEY CLUSTERED IDENTITY(1,1),
+	OrderDate DATETIME not null,
+	Total INT NOT NULL
+);
+
+CREATE TABLE dbo.OrdersDetails(
+	OrderID INT NOT NULL,
+	DishID INT NOT NULL,
+	DishCount INT NOT NULL,
+	CONSTRAINT FK_to_Orders_OrderID FOREIGN KEY (OrderID) REFERENCES dbo.Orders(OrderID),
+	CONSTRAINT FK_from_Orders_to_Dishes_DishID FOREIGN KEY (DishID) REFERENCES dbo.Dishes(DishID)
+);
+
+ALTER TABLE dbo.OrdersDetails ADD CONSTRAINT AK_OrderDishPair UNIQUE(OrderID,DishID);
+
+
