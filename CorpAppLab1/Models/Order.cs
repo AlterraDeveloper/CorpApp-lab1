@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using CorpAppLab1.DataAccessLayer;
 
 namespace CorpAppLab1.Models
 {
@@ -15,5 +16,6 @@ namespace CorpAppLab1.Models
             OrderDate = DateTime.Now;
             DishesAndCounts = new Dictionary<int, int>();
         }
+
     }
 }

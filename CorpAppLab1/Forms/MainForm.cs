@@ -434,7 +434,7 @@ namespace CorpAppLab1
             ordersDataGridView.Columns[0].HeaderText = "Номер заказа";
 
             ordersDataGridView.Columns[1].HeaderText = "Дата заказа";
-            ordersDataGridView.Columns[1].DefaultCellStyle.Format = "dddd, dd MMMM yyyy HH:mm:ss";
+            ordersDataGridView.Columns[1].DefaultCellStyle.Format = "dddd, dd MMMM yyyy";
 
             ordersDataGridView.Columns[2].HeaderText = "Сумма заказа";
 
@@ -449,16 +449,33 @@ namespace CorpAppLab1
             };
 
             new CreateOrderForm(order,_connectionString).ShowDialog(this);
+            FillOrRefreshGridOfOrders();
         }
 
         private void createReport_Click(object sender, EventArgs e)
         {
-
+            new DatePromptReportForm(_connectionString).ShowDialog(this);
         }
 
         private void showDetails_Click(object sender, EventArgs e)
         {
+            var selectedOrderRow = ordersDataGridView.SelectedRows[0];
+            var selectedOrder = (Order) selectedOrderRow.DataBoundItem;
 
+            var orderDetailsString = string.Empty;
+            var dishesRepo = new DishRepository(_connectionString);
+
+            foreach (var pair in selectedOrder.DishesAndCounts)
+            {
+                orderDetailsString += dishesRepo.GetById(pair.Key).DishName + " " + pair.Value + " порции(-й)\n";
+            }
+
+            if (string.IsNullOrEmpty(orderDetailsString))
+            {
+                orderDetailsString = "Заказ пуст";
+            }
+
+            MessageBox.Show($"{orderDetailsString}", "Содержимое заказа", MessageBoxButtons.OK);
         }
 
         #endregion

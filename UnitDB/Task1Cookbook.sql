@@ -52,4 +52,9 @@ CREATE TABLE dbo.OrdersDetails(
 
 ALTER TABLE dbo.OrdersDetails ADD CONSTRAINT AK_OrderDishPair UNIQUE(OrderID,DishID);
 
+GO
+CREATE PROCEDURE GetOrdersReport @dateFrom date,@dateTo date
+AS
+SELECT OrderID,OrderDate,Total FROM Orders where OrderDate >= @dateFrom AND OrderDate <= @dateTo;
+
 

@@ -28,8 +28,6 @@ namespace CorpAppLab1.Forms
                 dishesListBox.DataSource =
                     _order.DishesAndCounts.Select(x => _order.Dishes.Find(d => d.DishID == x.Key).DishName + " " + x.Value.ToString()).ToList();
 
-            //dishesGrid.Columns[0].HeaderText = "Блюдо";
-            //dishesGrid.Columns[1].HeaderText = "Кол-во порций";
         }
 
         private void btnAddDish_Click(object sender, EventArgs e)
@@ -44,6 +42,7 @@ namespace CorpAppLab1.Forms
 
         private void CreateOrderForm_FormClosing(object sender, FormClosingEventArgs e)
         {
+            _order.OrderDate = orderDateTimePicker.Value;
             new OrderRepository(_connectionString).Create(_order);
         }
     }

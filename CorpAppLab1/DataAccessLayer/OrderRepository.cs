@@ -1,4 +1,5 @@
-﻿using CorpAppLab1.Models;
+﻿using System;
+using CorpAppLab1.Models;
 using System.Collections.Generic;
 using System.Data.SqlClient;
 
@@ -94,17 +95,11 @@ namespace CorpAppLab1.DataAccessLayer
             using (var sqlConnection = new SqlConnection(ConnectionString))
             {
                 var cmd = new SqlCommand($@"INSERT INTO dbo.Orders (OrderDate,Total) VALUES('{order.OrderDate:MM/dd/yyyy}',{order.Total});
-                                            declare @orderID int;
-                                            select @orderID = SCOPE_IDENTITY();", sqlConnection);
+                                            select SCOPE_IDENTITY();", sqlConnection);
 
                 sqlConnection.Open();
 
-                var orderReader = cmd.ExecuteReader();
-                int orderID = 0;
-                while (orderReader.Read())
-                {
-                    orderID = (int)orderReader[0];
-                }
+                var orderID = Convert.ToInt32(cmd.ExecuteScalar());
                 
                 foreach (var pair in order.DishesAndCounts)
                 {
@@ -122,6 +117,45 @@ namespace CorpAppLab1.DataAccessLayer
 
         public void Delete(int id)
         {
+        }
+
+        public List<Order> GetReport(DateTime from, DateTime to)
+        {
+            var orders = new List<Order>();
+
+            using (var sqlConnection = new SqlConnection(ConnectionString))
+            {
+                var cmd = new SqlCommand($"EXEC GetOrdersReport @dateFrom = '{@from.Date:MM/dd/yyyy}' , @dateTo = '{to.Date:MM/dd/yyyy}'", sqlConnection);
+
+                sqlConnection.Open();
+
+                var orderReader = cmd.ExecuteReader();
+
+                while (orderReader.Read())
+                {
+                    var order = new Order
+                    {
+                        OrderID = orderReader.GetInt32(0),
+                        OrderDate = orderReader.GetDateTime(1),
+                        Total = orderReader.GetInt32(2)
+                    };
+
+                    cmd = new SqlCommand($@"select DishID,DishCount from OrdersDetails where OrderID = {order.OrderID}", sqlConnection);
+
+                    var orderDetailsReader = cmd.ExecuteReader();
+
+                    while (orderDetailsReader.Read())
+                    {
+                        order.DishesAndCounts.Add(orderDetailsReader.GetInt32(0), orderDetailsReader.GetInt32(1));
+                    }
+
+                    orders.Add(order);
+                }
+
+                sqlConnection.Close();
+            }
+
+            return orders;
         }
     }
 }
